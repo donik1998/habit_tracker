@@ -1,0 +1,59 @@
+// DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
+
+abstract class  LocaleKeys {
+  static const select_lang = 'select_lang';
+  static const start = 'start';
+  static const auth_selection_page_title = 'auth_selection_page_title';
+  static const auth_selection_page_subtitle = 'auth_selection_page_subtitle';
+  static const get_started = 'get_started';
+  static const already_have_an_account = 'already_have_an_account';
+  static const sign_in = 'sign_in';
+  static const login = 'login';
+  static const sign_up = 'sign_up';
+  static const first_name = 'first_name';
+  static const last_name = 'last_name';
+  static const email = 'email';
+  static const email_tip = 'email_tip';
+  static const password = 'password';
+  static const password_strength = 'password_strength';
+  static const password_feature_1 = 'password_feature_1';
+  static const password_feature_2 = 'password_feature_2';
+  static const password_feature_3 = 'password_feature_3';
+  static const password_feature_4 = 'password_feature_4';
+  static const email_cannot_be_empty = 'email_cannot_be_empty';
+  static const none = 'none';
+  static const weak = 'weak';
+  static const medium = 'medium';
+  static const strong = 'strong';
+  static const excellent = 'excellent';
+  static const email_is_not_valid = 'email_is_not_valid';
+  static const first_name_cannot_be_empty = 'first_name_cannot_be_empty';
+  static const last_name_cannot_be_empty = 'last_name_cannot_be_empty';
+  static const password_cannot_be_empty = 'password_cannot_be_empty';
+  static const forgot_password = 'forgot_password';
+  static const something_went_wrong = 'something_went_wrong';
+  static const forgot_password_hint = 'forgot_password_hint';
+  static const define_new_password = 'define_new_password';
+  static const verification_link_sent = 'verification_link_sent';
+  static const back_to_login = 'back_to_login';
+  static const challenges_tab = 'challenges_tab';
+  static const goals_tab = 'goals_tab';
+  static const habits_tab = 'habits_tab';
+  static const habits = 'habits';
+  static const profile_tab = 'profile_tab';
+  static const no_challenges_yet = 'no_challenges_yet';
+  static const challenges_tip = 'challenges_tip';
+  static const create_new = 'create_new';
+  static const new_adj = 'new_adj';
+  static const challenge_creation = 'challenge_creation';
+  static const create_challenge_title = 'create_challenge_title';
+  static const icon = 'icon';
+  static const title = 'title';
+  static const duration = 'duration';
+  static const start_date = 'start_date';
+  static const create = 'create';
+  static const select_start_date = 'select_start_date';
+  static const days = 'days';
+  static const start_date_with_date = 'start_date_with_date';
+
+}
