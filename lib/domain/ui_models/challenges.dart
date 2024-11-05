@@ -16,6 +16,26 @@ class ChallengeModel {
     required this.progress,
     required this.habits,
   });
+
+  ChallengeModel copyWith({
+    String? title,
+    String? iconPath,
+    int? duration,
+    DateTime? startDate,
+    int? progress,
+    List<HabitModel>? habits,
+    int? id,
+  }) {
+    return ChallengeModel(
+      title: title ?? this.title,
+      iconPath: iconPath ?? this.iconPath,
+      duration: duration ?? this.duration,
+      startDate: startDate ?? this.startDate,
+      progress: progress ?? this.progress,
+      habits: habits ?? this.habits,
+      id: id ?? this.id,
+    );
+  }
 }
 
 class HabitModel {
@@ -32,4 +52,20 @@ class HabitModel {
     required this.iconPath,
     required this.hexColor,
   });
+
+  HabitModel copyWith({
+    int? challengeId,
+    String? title,
+    String? description,
+    String? iconPath,
+    String? hexColor,
+  }) {
+    return HabitModel(
+      challengeId: challengeId ?? this.challengeId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      iconPath: iconPath ?? this.iconPath,
+      hexColor: hexColor ?? this.hexColor,
+    );
+  }
 }

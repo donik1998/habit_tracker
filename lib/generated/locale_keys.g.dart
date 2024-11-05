@@ -55,5 +55,30 @@ abstract class  LocaleKeys {
   static const select_start_date = 'select_start_date';
   static const days = 'days';
   static const start_date_with_date = 'start_date_with_date';
+  static const challenge_starts_on = 'challenge_starts_on';
+  static const no_habits_yet = 'no_habits_yet';
+  static const details = 'details';
+  static const delete = 'delete';
+  static const challenge_details = 'challenge_details';
+  static const challenge_edit = 'challenge_edit';
+  static const create_new_habit = 'create_new_habit';
+  static const save = 'save';
+  static const edit = 'edit';
+  static const your_challenges = 'your_challenges';
+  static const habit_name = 'habit_name';
+  static const description = 'description';
+  static const new_group = 'new_group';
+  static const no_goals_yet = 'no_goals_yet';
+  static const goals_description = 'goals_description';
+  static const new_habit = 'new_habit';
+  static const habits_description = 'habits_description';
+  static const all_challenges = 'all_challenges';
+  static const finished_challenges = 'finished_challenges';
+  static const language = 'language';
+  static const tutorial = 'tutorial';
+  static const settings = 'settings';
+  static const log_out = 'log_out';
+  static const create_goal_group = 'create_goal_group';
+  static const crete_new_goal_group_title = 'crete_new_goal_group_title';
 
 }

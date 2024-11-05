@@ -59,6 +59,31 @@
     "many": "{} дней",
     "other": "{} дней"
   },
-  "start_date_with_date": "Дата начала: {date}"
+  "start_date_with_date": "Дата начала: {date}",
+  "challenge_starts_on": "Испытание начинается {date}",
+  "no_habits_yet": "У вас пока нет привычек",
+  "details": "Детали",
+  "delete": "Удалить",
+  "challenge_details": "Детали испытания",
+  "challenge_edit": "Редактирование испытания",
+  "create_new_habit": "Создать новую привычку",
+  "save": "Сохранить",
+  "edit": "Редактировать",
+  "your_challenges": "Ваши испытания",
+  "habit_name": "Название привычки",
+  "description": "Описание",
+  "new_group": "Новая группа",
+  "no_goals_yet": "У вас пока нет целей",
+  "goals_description": "Цели - это задачи, которые вы хотите достичь за определенный период",
+  "new_habit": "Новая привычка",
+  "habits_description": "Привычки - это действия, которые вы хотите делать ежедневно",
+  "all_challenges": "Все испытания",
+  "finished_challenges": "Завершенные испытания",
+  "language": "Язык",
+  "tutorial": "Обучение",
+  "settings": "Настройки",
+  "log_out": "Выйти",
+  "create_goal_group": "Создать новую группу целей",
+  "crete_new_goal_group_title": "Пожалуйста, создайте новую группу для целей!"
 
 }

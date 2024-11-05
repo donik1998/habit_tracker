@@ -60,7 +60,7 @@ class SignInPage extends StatelessWidget {
                 AppSpacing.vertical16,
                 StandardButton(
                   onPressed: () => provider.signInWithEmailAndPassword().then((hasSignedIn) {
-                    if (hasSignedIn) Navigator.pushReplacementNamed(context, AppRoutes.home);
+                    if (hasSignedIn) Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (route) => false);
                   }),
                   text: LocaleKeys.login.tr(),
                   loading: provider.loading,

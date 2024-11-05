@@ -100,7 +100,7 @@ class ChallengeCard extends StatelessWidget {
                 }),
                 style: textTheme?.regularTextTheme.typography3.copyWith(color: AppColors.textFieldText),
               ),
-              AppSpacing.vertical16,
+              AppSpacing.vertical12,
               ProgressBarWithRightHint(
                 progress: challenge.progress,
                 maxProgress: 21,

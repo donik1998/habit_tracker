@@ -8,11 +8,17 @@ import 'package:habit_tracker/presentation/theme/app_spacing.dart';
 import 'package:habit_tracker/presentation/theme/colors.dart';
 import 'package:habit_tracker/utils/theme_extension.dart';
 
-class NoChallengesWidget extends StatelessWidget {
+class MainScreenNoContentWidget extends StatelessWidget {
+  final String title;
+  final String description;
+  final String? buttonText;
   final VoidCallback? onTap;
 
-  const NoChallengesWidget({
+  const MainScreenNoContentWidget({
     Key? key,
+    required this.title,
+    required this.description,
+    this.buttonText,
     this.onTap,
   }) : super(key: key);
 
@@ -47,12 +53,12 @@ class NoChallengesWidget extends StatelessWidget {
           ),
           AppSpacing.vertical20,
           Text(
-            LocaleKeys.no_challenges_yet.tr(),
+            title,
             style: textTheme?.boldTextTheme.typography6,
           ),
           AppSpacing.vertical20,
           Text(
-            LocaleKeys.challenges_tip.tr(),
+            description,
             style: textTheme?.regularTextTheme.typography3.copyWith(color: AppColors.textFieldText),
           ),
           AppSpacing.vertical20,
@@ -60,7 +66,7 @@ class NoChallengesWidget extends StatelessWidget {
             customWidth: MediaQuery.of(context).size.width - 72,
             customHeight: (MediaQuery.of(context).size.width - 72) * 0.1685,
             onPressed: () => onTap?.call(),
-            text: LocaleKeys.create_new.tr(),
+            text: buttonText ?? LocaleKeys.create_new.tr(),
           ),
         ],
       ),

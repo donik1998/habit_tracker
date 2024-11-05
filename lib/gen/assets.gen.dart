@@ -37,15 +37,27 @@ class $AssetsPngGen {
   /// File path: assets/png/app_icon.png
   AssetGenImage get appIcon => const AssetGenImage('assets/png/app_icon.png');
 
+  /// File path: assets/png/aquapark Small.png
+  AssetGenImage get aquaparkSmall => const AssetGenImage('assets/png/aquapark Small.png');
+
+  /// File path: assets/png/aquapark.png
+  AssetGenImage get aquapark => const AssetGenImage('assets/png/aquapark.png');
+
   /// File path: assets/png/mountains_back.jpg
   AssetGenImage get mountainsBack => const AssetGenImage('assets/png/mountains_back.jpg');
 
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon, mountainsBack];
+  List<AssetGenImage> get values => [appIcon, aquaparkSmall, aquapark, mountainsBack];
 }
 
 class $AssetsSvgGen {
   const $AssetsSvgGen();
+
+  /// File path: assets/svg/arrow_target.svg
+  SvgGenImage get arrowTarget => const SvgGenImage('assets/svg/arrow_target.svg');
+
+  /// File path: assets/svg/arrow_target_bold.svg
+  SvgGenImage get arrowTargetBold => const SvgGenImage('assets/svg/arrow_target_bold.svg');
 
   /// File path: assets/svg/award.svg
   SvgGenImage get award => const SvgGenImage('assets/svg/award.svg');
@@ -74,6 +86,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/directions_run_small.svg
   SvgGenImage get directionsRunSmall => const SvgGenImage('assets/svg/directions_run_small.svg');
 
+  /// File path: assets/svg/edit.svg
+  SvgGenImage get edit => const SvgGenImage('assets/svg/edit.svg');
+
   /// File path: assets/svg/goals_tab.svg
   SvgGenImage get goalsTab => const SvgGenImage('assets/svg/goals_tab.svg');
 
@@ -92,6 +107,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/lightning.svg
   SvgGenImage get lightning => const SvgGenImage('assets/svg/lightning.svg');
 
+  /// File path: assets/svg/line_chart_up.svg
+  SvgGenImage get lineChartUp => const SvgGenImage('assets/svg/line_chart_up.svg');
+
+  /// File path: assets/svg/log_out.svg
+  SvgGenImage get logOut => const SvgGenImage('assets/svg/log_out.svg');
+
   /// File path: assets/svg/logo_colored.svg
   SvgGenImage get logoColored => const SvgGenImage('assets/svg/logo_colored.svg');
 
@@ -100,6 +121,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/notification_bell.svg
   SvgGenImage get notificationBell => const SvgGenImage('assets/svg/notification_bell.svg');
+
+  /// File path: assets/svg/play_square.svg
+  SvgGenImage get playSquare => const SvgGenImage('assets/svg/play_square.svg');
 
   /// File path: assets/svg/plus.svg
   SvgGenImage get plus => const SvgGenImage('assets/svg/plus.svg');
@@ -116,14 +140,22 @@ class $AssetsSvgGen {
   /// File path: assets/svg/rocket.svg
   SvgGenImage get rocket => const SvgGenImage('assets/svg/rocket.svg');
 
+  /// File path: assets/svg/settings.svg
+  SvgGenImage get settings => const SvgGenImage('assets/svg/settings.svg');
+
   /// File path: assets/svg/splash_logo.svg
   SvgGenImage get splashLogo => const SvgGenImage('assets/svg/splash_logo.svg');
+
+  /// File path: assets/svg/translate.svg
+  SvgGenImage get translate => const SvgGenImage('assets/svg/translate.svg');
 
   /// File path: assets/svg/visible.svg
   SvgGenImage get visible => const SvgGenImage('assets/svg/visible.svg');
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        arrowTarget,
+        arrowTargetBold,
         award,
         calendar,
         challengeTab,
@@ -133,21 +165,27 @@ class $AssetsSvgGen {
         cross,
         directionsRun,
         directionsRunSmall,
+        edit,
         goalsTab,
         habitsTab,
         information,
         informationOutlined,
         invisible,
         lightning,
+        lineChartUp,
+        logOut,
         logoColored,
         logoWhite,
         notificationBell,
+        playSquare,
         plus,
         profileTab,
         radioButtonSelected,
         radioButtonUnselected,
         rocket,
+        settings,
         splashLogo,
+        translate,
         visible
       ];
 }

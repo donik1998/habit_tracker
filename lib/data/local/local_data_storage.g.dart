@@ -726,6 +726,16 @@ class $GoalsTable extends Goals with TableInfo<$GoalsTable, Goal> {
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
       'description', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _isCompletedMeta =
+      const VerificationMeta('isCompleted');
+  @override
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
+      'is_completed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_completed" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _cacheTimestampMeta =
       const VerificationMeta('cacheTimestamp');
   @override
@@ -734,7 +744,7 @@ class $GoalsTable extends Goals with TableInfo<$GoalsTable, Goal> {
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, groupId, description, cacheTimestamp];
+      [id, groupId, description, isCompleted, cacheTimestamp];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -762,6 +772,12 @@ class $GoalsTable extends Goals with TableInfo<$GoalsTable, Goal> {
     } else if (isInserting) {
       context.missing(_descriptionMeta);
     }
+    if (data.containsKey('is_completed')) {
+      context.handle(
+          _isCompletedMeta,
+          isCompleted.isAcceptableOrUnknown(
+              data['is_completed']!, _isCompletedMeta));
+    }
     if (data.containsKey('cache_timestamp')) {
       context.handle(
           _cacheTimestampMeta,
@@ -785,6 +801,8 @@ class $GoalsTable extends Goals with TableInfo<$GoalsTable, Goal> {
           .read(DriftSqlType.int, data['${effectivePrefix}group_id'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+      isCompleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_completed'])!,
       cacheTimestamp: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime, data['${effectivePrefix}cache_timestamp'])!,
     );
@@ -800,11 +818,13 @@ class Goal extends DataClass implements Insertable<Goal> {
   final int id;
   final int groupId;
   final String description;
+  final bool isCompleted;
   final DateTime cacheTimestamp;
   const Goal(
       {required this.id,
       required this.groupId,
       required this.description,
+      required this.isCompleted,
       required this.cacheTimestamp});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -812,6 +832,7 @@ class Goal extends DataClass implements Insertable<Goal> {
     map['id'] = Variable<int>(id);
     map['group_id'] = Variable<int>(groupId);
     map['description'] = Variable<String>(description);
+    map['is_completed'] = Variable<bool>(isCompleted);
     map['cache_timestamp'] = Variable<DateTime>(cacheTimestamp);
     return map;
   }
@@ -821,6 +842,7 @@ class Goal extends DataClass implements Insertable<Goal> {
       id: Value(id),
       groupId: Value(groupId),
       description: Value(description),
+      isCompleted: Value(isCompleted),
       cacheTimestamp: Value(cacheTimestamp),
     );
   }
@@ -832,6 +854,7 @@ class Goal extends DataClass implements Insertable<Goal> {
       id: serializer.fromJson<int>(json['id']),
       groupId: serializer.fromJson<int>(json['groupId']),
       description: serializer.fromJson<String>(json['description']),
+      isCompleted: serializer.fromJson<bool>(json['isCompleted']),
       cacheTimestamp: serializer.fromJson<DateTime>(json['cacheTimestamp']),
     );
   }
@@ -842,6 +865,7 @@ class Goal extends DataClass implements Insertable<Goal> {
       'id': serializer.toJson<int>(id),
       'groupId': serializer.toJson<int>(groupId),
       'description': serializer.toJson<String>(description),
+      'isCompleted': serializer.toJson<bool>(isCompleted),
       'cacheTimestamp': serializer.toJson<DateTime>(cacheTimestamp),
     };
   }
@@ -850,11 +874,13 @@ class Goal extends DataClass implements Insertable<Goal> {
           {int? id,
           int? groupId,
           String? description,
+          bool? isCompleted,
           DateTime? cacheTimestamp}) =>
       Goal(
         id: id ?? this.id,
         groupId: groupId ?? this.groupId,
         description: description ?? this.description,
+        isCompleted: isCompleted ?? this.isCompleted,
         cacheTimestamp: cacheTimestamp ?? this.cacheTimestamp,
       );
   Goal copyWithCompanion(GoalsCompanion data) {
@@ -863,6 +889,8 @@ class Goal extends DataClass implements Insertable<Goal> {
       groupId: data.groupId.present ? data.groupId.value : this.groupId,
       description:
           data.description.present ? data.description.value : this.description,
+      isCompleted:
+          data.isCompleted.present ? data.isCompleted.value : this.isCompleted,
       cacheTimestamp: data.cacheTimestamp.present
           ? data.cacheTimestamp.value
           : this.cacheTimestamp,
@@ -875,13 +903,15 @@ class Goal extends DataClass implements Insertable<Goal> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('description: $description, ')
+          ..write('isCompleted: $isCompleted, ')
           ..write('cacheTimestamp: $cacheTimestamp')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, groupId, description, cacheTimestamp);
+  int get hashCode =>
+      Object.hash(id, groupId, description, isCompleted, cacheTimestamp);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -889,6 +919,7 @@ class Goal extends DataClass implements Insertable<Goal> {
           other.id == this.id &&
           other.groupId == this.groupId &&
           other.description == this.description &&
+          other.isCompleted == this.isCompleted &&
           other.cacheTimestamp == this.cacheTimestamp);
 }
 
@@ -896,17 +927,20 @@ class GoalsCompanion extends UpdateCompanion<Goal> {
   final Value<int> id;
   final Value<int> groupId;
   final Value<String> description;
+  final Value<bool> isCompleted;
   final Value<DateTime> cacheTimestamp;
   const GoalsCompanion({
     this.id = const Value.absent(),
     this.groupId = const Value.absent(),
     this.description = const Value.absent(),
+    this.isCompleted = const Value.absent(),
     this.cacheTimestamp = const Value.absent(),
   });
   GoalsCompanion.insert({
     this.id = const Value.absent(),
     required int groupId,
     required String description,
+    this.isCompleted = const Value.absent(),
     required DateTime cacheTimestamp,
   })  : groupId = Value(groupId),
         description = Value(description),
@@ -915,12 +949,14 @@ class GoalsCompanion extends UpdateCompanion<Goal> {
     Expression<int>? id,
     Expression<int>? groupId,
     Expression<String>? description,
+    Expression<bool>? isCompleted,
     Expression<DateTime>? cacheTimestamp,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (groupId != null) 'group_id': groupId,
       if (description != null) 'description': description,
+      if (isCompleted != null) 'is_completed': isCompleted,
       if (cacheTimestamp != null) 'cache_timestamp': cacheTimestamp,
     });
   }
@@ -929,11 +965,13 @@ class GoalsCompanion extends UpdateCompanion<Goal> {
       {Value<int>? id,
       Value<int>? groupId,
       Value<String>? description,
+      Value<bool>? isCompleted,
       Value<DateTime>? cacheTimestamp}) {
     return GoalsCompanion(
       id: id ?? this.id,
       groupId: groupId ?? this.groupId,
       description: description ?? this.description,
+      isCompleted: isCompleted ?? this.isCompleted,
       cacheTimestamp: cacheTimestamp ?? this.cacheTimestamp,
     );
   }
@@ -950,6 +988,9 @@ class GoalsCompanion extends UpdateCompanion<Goal> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
+    if (isCompleted.present) {
+      map['is_completed'] = Variable<bool>(isCompleted.value);
+    }
     if (cacheTimestamp.present) {
       map['cache_timestamp'] = Variable<DateTime>(cacheTimestamp.value);
     }
@@ -962,6 +1003,7 @@ class GoalsCompanion extends UpdateCompanion<Goal> {
           ..write('id: $id, ')
           ..write('groupId: $groupId, ')
           ..write('description: $description, ')
+          ..write('isCompleted: $isCompleted, ')
           ..write('cacheTimestamp: $cacheTimestamp')
           ..write(')'))
         .toString();
@@ -2226,12 +2268,14 @@ typedef $$GoalsTableCreateCompanionBuilder = GoalsCompanion Function({
   Value<int> id,
   required int groupId,
   required String description,
+  Value<bool> isCompleted,
   required DateTime cacheTimestamp,
 });
 typedef $$GoalsTableUpdateCompanionBuilder = GoalsCompanion Function({
   Value<int> id,
   Value<int> groupId,
   Value<String> description,
+  Value<bool> isCompleted,
   Value<DateTime> cacheTimestamp,
 });
 
@@ -2266,6 +2310,11 @@ class $$GoalsTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
+  ColumnFilters<bool> get isCompleted => $state.composableBuilder(
+      column: $state.table.isCompleted,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
   ColumnFilters<DateTime> get cacheTimestamp => $state.composableBuilder(
       column: $state.table.cacheTimestamp,
       builder: (column, joinBuilders) =>
@@ -2294,6 +2343,11 @@ class $$GoalsTableOrderingComposer
 
   ColumnOrderings<String> get description => $state.composableBuilder(
       column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isCompleted => $state.composableBuilder(
+      column: $state.table.isCompleted,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -2338,24 +2392,28 @@ class $$GoalsTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<int> groupId = const Value.absent(),
             Value<String> description = const Value.absent(),
+            Value<bool> isCompleted = const Value.absent(),
             Value<DateTime> cacheTimestamp = const Value.absent(),
           }) =>
               GoalsCompanion(
             id: id,
             groupId: groupId,
             description: description,
+            isCompleted: isCompleted,
             cacheTimestamp: cacheTimestamp,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required int groupId,
             required String description,
+            Value<bool> isCompleted = const Value.absent(),
             required DateTime cacheTimestamp,
           }) =>
               GoalsCompanion.insert(
             id: id,
             groupId: groupId,
             description: description,
+            isCompleted: isCompleted,
             cacheTimestamp: cacheTimestamp,
           ),
           withReferenceMapper: (p0) => p0

@@ -59,6 +59,31 @@
     "many": "{} kun",
     "other": "{} kun"
   },
-  "start_date_with_date": "Boshlang'ich sanasi: {date}"
+  "start_date_with_date": "Boshlang'ich sanasi: {date}",
+  "challenge_starts_on": "Mashaqqat {date} kuni boshlanadi",
+  "no_habits_yet": "Hozircha sizda odatlar yo'q",
+  "details": "Tafsilotlar",
+  "delete": "O'chirish",
+  "challenge_details": "Mashaqqat tafsilotlari",
+  "challenge_edit": "Mashaqqatni tahrirlash",
+  "create_new_habit": "Yangi odat yaratish",
+  "save": "Saqlash",
+  "edit": "Tahrirlash",
+  "your_challenges": "Sizning mashaqqatlaringiz",
+  "habit_name": "Odat nomi",
+  "description": "Tavsif",
+  "new_group": "Yangi guruh",
+  "no_goals_yet": "Hozircha sizda maqsadlar yo'q",
+  "goals_description": "Maqsadlar - bu belgilangan davrda erishmoqchi bo'lgan vazifalar",
+  "new_habit": "Yangi odat",
+  "habits_description": "Odatlar - bu sizning har kuni bajarishni istagan harakatlaringiz",
+  "all_challenges": "Barcha mashaqqatlar",
+  "finished_challenges": "Yakunlangan mashaqqatlar",
+  "language": "Til",
+  "tutorial": "O'rgatuvchi",
+  "settings": "Sozlamalar",
+  "log_out": "Chiqish",
+  "create_goal_group": "Maqsadlar guruhini yaratish",
+  "crete_new_goal_group_title": "Iltimos maqsadlar uchun yangi guruh yarating!"
 
 }

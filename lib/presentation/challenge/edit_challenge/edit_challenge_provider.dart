@@ -1,14 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:habit_tracker/domain/dependency_injection.dart';
 import 'package:habit_tracker/domain/repository/local_database_repository.dart';
+import 'package:habit_tracker/domain/ui_models/challenges.dart';
 
-class CreateChallengePageProvider extends ChangeNotifier {
-  final localDatabaseRepository = locator<LocalDatabaseRepository>();
+class EditChallengeProvider extends ChangeNotifier {
+  ChallengeModel challenge;
 
-  CreateChallengePageProvider() {
-    startDateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
-    durationController.text = '21';
+  LocalDatabaseRepository get localDatabaseRepository => locator<LocalDatabaseRepository>();
+
+  EditChallengeProvider(this.challenge) {
+    titleController.text = challenge.title;
+    startDateController.text = DateFormat('dd/MM/yyyy').format(challenge.startDate);
+    durationController.text = challenge.duration.toString();
+    selectedIconPath = challenge.iconPath;
     titleController.addListener(_validateFields);
   }
 
@@ -37,28 +42,26 @@ class CreateChallengePageProvider extends ChangeNotifier {
   bool get isFormValid =>
       titleController.text.isNotEmpty && durationController.text.isNotEmpty && startDateController.text.isNotEmpty;
 
-  Future<bool> saveChallenge() async {
-    print(isFormValid);
+  Future<bool> editChallenge() async {
     if (!isFormValid) return false;
     loading = true;
     notifyListeners();
     try {
-      localDatabaseRepository.createChallenge(
-        challengeName: titleController.text,
+      challenge = challenge.copyWith(
+        title: titleController.text,
         iconPath: selectedIconPath!,
-        durationInDays: int.parse(durationController.text),
+        duration: int.parse(durationController.text),
         startDate: DateFormat('dd/MM/yyyy').parse(startDateController.text),
-        endDate: DateFormat('dd/MM/yyyy')
-            .parse(startDateController.text)
-            .add(Duration(days: int.parse(durationController.text))),
       );
+      notifyListeners();
+      await localDatabaseRepository.editChallenge(challenge);
       return true;
     } catch (e) {
       print(e);
+      return false;
     } finally {
       loading = false;
       notifyListeners();
     }
-    return false;
   }
 }

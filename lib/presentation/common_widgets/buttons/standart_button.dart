@@ -52,7 +52,8 @@ class StandardButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: InkWell(
-        onTap: loading ? null : onPressed,
+        onTap: loading || disabled ? null : onPressed,
+        borderRadius: BorderRadius.circular(8),
         child: Ink(
           height: customHeight ?? (MediaQuery.of(context).size.width * 0.91 * 0.1685),
           width: customWidth ?? double.infinity,

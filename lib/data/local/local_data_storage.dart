@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
-import 'package:drift_flutter/drift_flutter.dart';
+import 'package:drift/native.dart';
 import 'package:habit_tracker/data/local/tables/challenges_table.dart';
 import 'package:habit_tracker/data/local/tables/goals.dart';
 import 'package:habit_tracker/data/local/tables/habits_table.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:sqlite3/sqlite3.dart';
+import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'local_data_storage.g.dart';
 
@@ -17,8 +23,18 @@ class LocalDatabase extends _$LocalDatabase {
   int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
-    // `driftDatabase` from `package:drift_flutter` stores the database in
-    // `getApplicationDocumentsDirectory()`.
-    return driftDatabase(name: 'content_database');
+    return LazyDatabase(() async {
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, 'db.sqlite'));
+
+      if (Platform.isAndroid) {
+        await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
+      }
+
+      final cachebase = (await getTemporaryDirectory()).path;
+      sqlite3.tempDirectory = cachebase;
+
+      return NativeDatabase.createInBackground(file, logStatements: true);
+    });
   }
 }

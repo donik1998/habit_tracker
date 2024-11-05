@@ -1,21 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habit_tracker/gen/assets.gen.dart';
 import 'package:habit_tracker/generated/locale_keys.g.dart';
 import 'package:habit_tracker/presentation/common_widgets/buttons/selectable_glyph.dart';
 import 'package:habit_tracker/presentation/common_widgets/buttons/standart_button.dart';
 import 'package:habit_tracker/presentation/common_widgets/inputs/custom_input_field.dart';
-import 'package:habit_tracker/presentation/create_challenge/create_challenge_provider.dart';
+import 'package:habit_tracker/presentation/goal/providers/create_goal_group_provider.dart';
 import 'package:habit_tracker/presentation/theme/app_spacing.dart';
 import 'package:habit_tracker/presentation/theme/colors.dart';
 import 'package:habit_tracker/utils/theme_extension.dart';
 import 'package:provider/provider.dart';
 
-class CreateChallengePage extends StatelessWidget {
-  const CreateChallengePage({Key? key}) : super(key: key);
+class CreateGoalGroupPage extends StatelessWidget {
+  const CreateGoalGroupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +22,11 @@ class CreateChallengePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
-        automaticallyImplyLeading: false,
         elevation: 2.5,
         shadowColor: Colors.black.withOpacity(0.25),
+        automaticallyImplyLeading: false,
         title: Text(
-          LocaleKeys.challenge_creation.tr(),
+          LocaleKeys.create_goal_group.tr(),
         ),
         actions: [
           IconButton(
@@ -37,17 +35,18 @@ class CreateChallengePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<CreateChallengePageProvider>(
+      body: Consumer<CreateGoalGroupProvider>(
         builder: (context, provider, child) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AppSpacing.vertical24,
+                AppSpacing.vertical8,
                 Text(
-                  LocaleKeys.create_challenge_title.tr(),
-                  style: textTheme?.boldTextTheme.typography6,
+                  LocaleKeys.crete_new_goal_group_title.tr(),
+                  style: textTheme?.boldTextTheme.typography5,
                 ),
                 AppSpacing.vertical24,
                 Text(
@@ -105,79 +104,10 @@ class CreateChallengePage extends StatelessWidget {
                   label: LocaleKeys.title.tr(),
                   controller: provider.titleController,
                 ),
-                AppSpacing.vertical16,
-                CustomInputField(
-                  label: LocaleKeys.duration.tr(),
-                  controller: provider.durationController,
-                  suffixIcon: SvgPicture.asset(Assets.svg.informationOutlined.path),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  keyboardType: TextInputType.number,
-                ),
-                AppSpacing.vertical16,
-                CustomInputField(
-                  label: LocaleKeys.start_date.tr(),
-                  controller: provider.startDateController,
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      showCupertinoModalPopup<void>(
-                        context: context,
-                        builder: (BuildContext context) => Material(
-                          child: Container(
-                            height: MediaQuery.of(context).size.height * 0.375,
-                            padding: const EdgeInsets.only(top: 6.0),
-                            margin: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16.0),
-                                topRight: Radius.circular(16.0),
-                              ),
-                              color: CupertinoColors.systemBackground.resolveFrom(context),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 8,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.grey,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                ),
-                                AppSpacing.vertical10,
-                                Text(
-                                  LocaleKeys.select_start_date.tr(),
-                                  style: textTheme?.boldTextTheme.typography3,
-                                ),
-                                AppSpacing.vertical10,
-                                SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.3,
-                                  child: CupertinoDatePicker(
-                                    initialDateTime: DateTime.now(),
-                                    mode: CupertinoDatePickerMode.date,
-                                    use24hFormat: true,
-                                    showDayOfWeek: true,
-                                    onDateTimeChanged: (DateTime newDate) => provider.setStartDate(newDate),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    child: SvgPicture.asset(Assets.svg.calendar.path),
-                  ),
-                  readOnly: true,
-                ),
                 const Spacer(),
                 StandardButton(
-                  onPressed: () => provider.saveChallenge().then((success) {
-                    if (success) Navigator.pop(context);
+                  onPressed: () => provider.createGoalsGroup().then((value) {
+                    if (value) Navigator.pop(context);
                   }),
                   disabled: !provider.isFormValid,
                   loading: provider.loading,
