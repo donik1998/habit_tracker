@@ -55,6 +55,7 @@ class GoalsTab extends StatelessWidget {
 
                       return GoalGroupWidget(
                         goalGroup: goalGroup,
+                        onDone: () => provider.refreshGoals(),
                       );
                     },
                     separatorBuilder: (context, index) => AppSpacing.vertical16,

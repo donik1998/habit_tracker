@@ -80,5 +80,23 @@ abstract class  LocaleKeys {
   static const log_out = 'log_out';
   static const create_goal_group = 'create_goal_group';
   static const crete_new_goal_group_title = 'crete_new_goal_group_title';
+  static const new_goal = 'new_goal';
+  static const add_to_challenge = 'add_to_challenge';
+  static const select_challenge = 'select_challenge';
+  static const habit_details = 'habit_details';
+  static const end_date = 'end_date';
+  static const completed_days = 'completed_days';
+  static const progress_saved = 'progress_saved';
+  static const error_occurred = 'error_occurred';
+  static const name = 'name';
+  static const select_color = 'select_color';
+  static const daily = 'daily';
+  static const weekly = 'weekly';
+  static const overall = 'overall';
+  static const today = 'today';
+  static const habit_not_done = 'habit_not_done';
+  static const habit_fifty_done = 'habit_fifty_done';
+  static const habit_hundred_done = 'habit_hundred_done';
+  static const completed = 'completed';
 
 }

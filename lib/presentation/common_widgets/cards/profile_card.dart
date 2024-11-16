@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:habit_tracker/gen/assets.gen.dart';
 import 'package:habit_tracker/presentation/common_widgets/buttons/standart_icon_button.dart';
+import 'package:habit_tracker/presentation/common_widgets/loader.dart';
 import 'package:habit_tracker/presentation/theme/app_spacing.dart';
 import 'package:habit_tracker/presentation/theme/colors.dart';
 import 'package:habit_tracker/utils/theme_extension.dart';
@@ -46,6 +47,13 @@ class ProfileCard extends StatelessWidget {
                 child: Image.network(
                   avatarPath,
                   fit: BoxFit.cover,
+                  height: MediaQuery.sizeOf(context).width * 0.125,
+                  width: MediaQuery.sizeOf(context).width * 0.125,
+                  loadingBuilder: (context, image, chunks) {
+                    if (chunks?.cumulativeBytesLoaded == chunks?.expectedTotalBytes) return image;
+
+                    return const Loader();
+                  },
                   errorBuilder: (context, error, trace) => ColoredBox(
                     color: AppColors.purple500,
                     child: Padding(

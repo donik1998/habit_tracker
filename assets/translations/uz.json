@@ -84,6 +84,24 @@
   "settings": "Sozlamalar",
   "log_out": "Chiqish",
   "create_goal_group": "Maqsadlar guruhini yaratish",
-  "crete_new_goal_group_title": "Iltimos maqsadlar uchun yangi guruh yarating!"
+  "crete_new_goal_group_title": "Iltimos maqsadlar uchun yangi guruh yarating!",
+  "new_goal": "Yangi maqsad",
+  "add_to_challenge": "Mashaqqatga qo'shish",
+  "select_challenge": "Mashaqqatni tanlang",
+  "habit_details": "Odat tafsilotlari",
+  "end_date": "Yakunlanish sanasi",
+  "completed_days": "Yakunlangan kunlar",
+  "progress_saved": "Odatning progressi saqlandi",
+  "error_occurred": "Xatolik yuz berdi",
+  "name": "Ism",
+  "select_color": "Rangni tanlang",
+  "daily": "Kunlik",
+  "weekly":"Haftalik",
+  "overall": "Umumiy",
+  "today": "Bugun",
+  "habit_not_done": "0",
+  "habit_fifty_done":"50%",
+  "habit_hundred_done": "100%",
+  "completed": "Yakunlandi"
 
 }

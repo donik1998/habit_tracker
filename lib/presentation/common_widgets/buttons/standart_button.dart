@@ -12,6 +12,7 @@ class StandardButton extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final bool disabled;
+  final BorderSide? border;
 
   const StandardButton({
     Key? key,
@@ -23,6 +24,7 @@ class StandardButton extends StatelessWidget {
     this.backgroundColor = AppColors.purple500,
     this.textColor = Colors.white,
     this.disabled = false,
+    this.border,
   }) : super(key: key);
 
   factory StandardButton.light({
@@ -50,6 +52,7 @@ class StandardButton extends StatelessWidget {
       color: disabled ? AppColors.platinum100 : backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
+        side: border ?? BorderSide.none,
       ),
       child: InkWell(
         onTap: loading || disabled ? null : onPressed,
@@ -64,7 +67,8 @@ class StandardButton extends StatelessWidget {
                   ? const Loader()
                   : Text(
                       text,
-                      style: boldTextTheme?.typography3.copyWith(color: disabled ? AppColors.disabledText : textColor),
+                      style: boldTextTheme?.typography3
+                          .copyWith(color: disabled ? AppColors.disabledText : textColor),
                     ),
             ),
           ),

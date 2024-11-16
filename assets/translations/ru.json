@@ -84,6 +84,24 @@
   "settings": "Настройки",
   "log_out": "Выйти",
   "create_goal_group": "Создать новую группу целей",
-  "crete_new_goal_group_title": "Пожалуйста, создайте новую группу для целей!"
+  "crete_new_goal_group_title": "Пожалуйста, создайте новую группу для целей!",
+  "new_goal": "Новая цель",
+  "add_to_challenge": "Добавить к испытанию",
+  "select_challenge": "Выберите испытание",
+  "habit_details": "Детали привычки",
+  "end_date": "Дата окончания",
+  "completed_days": "Завершенные дни",
+  "progress_saved": "Прогресс сохранен",
+  "error_occurred": "Произошла ошибка",
+  "name": "Имя",
+  "select_color": "Выберите цвет",
+  "daily": "День",
+  "weekly":"Неделя",
+  "overall": "Общее",
+  "today": "Сегодня",
+  "habit_not_done": "0",
+  "habit_fifty_done":"50%",
+  "habit_hundred_done": "100%",
+  "completed": "Завершено"
 
 }

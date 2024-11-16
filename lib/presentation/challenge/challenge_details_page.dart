@@ -3,11 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habit_tracker/domain/routing.dart';
+import 'package:habit_tracker/domain/ui_models/challenges.dart';
 import 'package:habit_tracker/gen/assets.gen.dart';
 import 'package:habit_tracker/generated/locale_keys.g.dart';
+import 'package:habit_tracker/presentation/challenge/challenge_details_tabs/daily_habits_tab.dart';
+import 'package:habit_tracker/presentation/challenge/challenge_details_tabs/overall_habit_list.dart';
+import 'package:habit_tracker/presentation/challenge/challenge_details_tabs/week_habits_list.dart';
 import 'package:habit_tracker/presentation/challenge/providers/challenge_details_provider.dart';
-import 'package:habit_tracker/presentation/common_widgets/tiles/challenge_habit_tile.dart';
 import 'package:habit_tracker/presentation/common_widgets/tiles/iconed_row_with_action.dart';
+import 'package:habit_tracker/presentation/common_widgets/week_selector.dart';
 import 'package:habit_tracker/presentation/common_widgets/wrappers/bottom_sheet_wrapper.dart';
 import 'package:habit_tracker/presentation/theme/app_spacing.dart';
 import 'package:habit_tracker/presentation/theme/colors.dart';
@@ -46,7 +50,8 @@ class ChallengeDetailsPage extends StatelessWidget {
                 AppSpacing.vertical2,
                 Text(
                   '${provider.challenge.progress}/21',
-                  style: textTheme?.regularTextTheme.typography1.copyWith(color: AppColors.textFieldText),
+                  style: textTheme?.regularTextTheme.typography1
+                      .copyWith(color: AppColors.textFieldText),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -83,7 +88,8 @@ class ChallengeDetailsPage extends StatelessWidget {
                             title: LocaleKeys.details.tr(),
                             onTap: () {
                               Navigator.pop(context);
-                              Navigator.pushNamed(context, AppRoutes.challengeInfo, arguments: provider.challenge)
+                              Navigator.pushNamed(context, AppRoutes.challengeInfo,
+                                      arguments: provider.challenge)
                                   .then((res) => provider.refreshChallenge());
                             },
                           ),
@@ -98,50 +104,185 @@ class ChallengeDetailsPage extends StatelessWidget {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                provider.challenge.habits.isNotEmpty
-                    ? CupertinoTabBar(items: [])
-                    : Text(
-                        LocaleKeys.challenge_starts_on.tr(
-                          namedArgs: {
-                            'date':
-                                DateFormat('dd MMMM', context.locale.languageCode).format(provider.challenge.startDate)
-                          },
-                        ),
-                        style: textTheme?.boldTextTheme.typography5,
-                      ),
-                Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
                   child: provider.challenge.habits.isNotEmpty
-                      ? ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) => ChallengeHabitTile(
-                            habit: provider.challenge.habits.elementAt(index),
-                          ),
-                          separatorBuilder: (context, index) => AppSpacing.vertical12,
-                          itemCount: provider.challenge.habits.length,
+                      ? CupertinoSlidingSegmentedControl<String>(
+                          groupValue: provider.selectedHabitsDisplayingMode,
+                          onValueChanged: provider.switchHabitsDisplayingMode,
+                          children: {
+                            ChallengeHabitsDisplayingMode.daily: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                LocaleKeys.daily.tr(),
+                                style: textTheme?.regularTextTheme.typography3.copyWith(
+                                  color: provider.selectedHabitsDisplayingMode ==
+                                          ChallengeHabitsDisplayingMode.daily
+                                      ? AppColors.purple500
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            ChallengeHabitsDisplayingMode.weekly: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                LocaleKeys.weekly.tr(),
+                                style: textTheme?.regularTextTheme.typography3.copyWith(
+                                  color: provider.selectedHabitsDisplayingMode ==
+                                          ChallengeHabitsDisplayingMode.weekly
+                                      ? AppColors.purple500
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            ChallengeHabitsDisplayingMode.overall: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                LocaleKeys.overall.tr(),
+                                style: textTheme?.regularTextTheme.typography3.copyWith(
+                                  color: provider.selectedHabitsDisplayingMode ==
+                                          ChallengeHabitsDisplayingMode.overall
+                                      ? AppColors.purple500
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          },
                         )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SvgPicture.asset(
-                              Assets.svg.arrowTarget.path,
-                              color: AppColors.platinum400,
-                              height: MediaQuery.of(context).size.width * 0.15,
-                              width: MediaQuery.of(context).size.width * 0.15,
-                            ),
-                            AppSpacing.vertical10,
-                            // regular/typo3
-                            Text(
-                              LocaleKeys.no_habits_yet.tr(),
-                              style: textTheme?.regularTextTheme.typography3.copyWith(color: AppColors.platinum400),
-                            ),
-                          ],
+                      : Text(
+                          LocaleKeys.challenge_starts_on.tr(
+                            namedArgs: {
+                              'date': DateFormat('dd MMMM', context.locale.languageCode)
+                                  .format(provider.challenge.startDate)
+                            },
+                          ),
+                          style: textTheme?.boldTextTheme.typography5,
                         ),
                 ),
+                SliverToBoxAdapter(
+                  child: AppSpacing.vertical16,
+                ),
+                if (provider.selectedHabitsDisplayingMode == ChallengeHabitsDisplayingMode.daily &&
+                    provider.challenge.habits.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 250),
+                      transitionBuilder: (child, animation) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(1, 0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+                      child: provider.selectedHabitsDisplayingMode !=
+                              ChallengeHabitsDisplayingMode.weekly
+                          ? Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '${LocaleKeys.today.tr()} ${DateFormat('dd MMMM', context.locale.languageCode).format(DateTime.now())}',
+                                  style: textTheme?.boldTextTheme.typography6,
+                                ),
+                                if (provider.selectedHabitsDisplayingMode !=
+                                    ChallengeHabitsDisplayingMode.weekly)
+                                  Text(
+                                    '${provider.challenge.startDate.difference(DateTime.now()).inDays.abs()}/21',
+                                    style: textTheme?.boldTextTheme.typography6,
+                                  ),
+                              ],
+                            )
+                          : WeekSelector(
+                              onWeekSelected: provider.selectWeek,
+                            ),
+                    ),
+                  ),
+                SliverToBoxAdapter(
+                  child: AppSpacing.vertical16,
+                ),
+                SliverToBoxAdapter(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    transitionBuilder: (child, animation) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(1, 0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                    child: provider.selectedHabitsDisplayingMode ==
+                            ChallengeHabitsDisplayingMode.daily
+                        ? DailyHabitsTab(
+                            notCompletedTodayHabits: provider.challenge.notCompletedTodayHabits,
+                            completedTodayHabits: provider.challenge.completedTodayHabits,
+                            onDone: (habit) => provider.markDailyProgress(
+                              habit.id,
+                              HABIT_PROGRESS_NOT_DONE,
+                            ),
+                            onHalfDone: (habit) => provider.markDailyProgress(
+                              habit.id,
+                              HABIT_PROGRESS_HALF_DONE,
+                            ),
+                            onNotDone: (habit) => provider.markDailyProgress(
+                              habit.id,
+                              HABIT_PROGRESS_COMPLETED,
+                            ),
+                          )
+                        : provider.selectedHabitsDisplayingMode ==
+                                ChallengeHabitsDisplayingMode.weekly
+                            ? WeeklyTilesList(
+                                selectedWeekNotifier: provider.selectedWeekNotifier,
+                                habits: provider.challenge.habits,
+                                onDone: (habitProgressId, habitId) => provider.markWeeklyProgress(
+                                  habitId: habitId,
+                                  habitProgressId: habitProgressId,
+                                  progress: HABIT_PROGRESS_COMPLETED,
+                                ),
+                                onHalfDone: (habitProgressId, habitId) =>
+                                    provider.markWeeklyProgress(
+                                  habitId: habitId,
+                                  habitProgressId: habitProgressId,
+                                  progress: HABIT_PROGRESS_HALF_DONE,
+                                ),
+                                onNotDone: (habitProgressId, habitId) =>
+                                    provider.markWeeklyProgress(
+                                  habitId: habitId,
+                                  habitProgressId: habitProgressId,
+                                  progress: HABIT_PROGRESS_NOT_DONE,
+                                ),
+                              )
+                            : OverallTilesList(),
+                  ),
+                ),
+                if (provider.challenge.habits.isEmpty)
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.675,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SvgPicture.asset(
+                            Assets.svg.arrowTarget.path,
+                            color: AppColors.platinum400,
+                            height: MediaQuery.of(context).size.width * 0.15,
+                            width: MediaQuery.of(context).size.width * 0.15,
+                          ),
+                          AppSpacing.vertical10,
+                          Text(
+                            LocaleKeys.no_habits_yet.tr(),
+                            style: textTheme?.regularTextTheme.typography3
+                                .copyWith(color: AppColors.platinum400),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
               ],
             ),
           ),
@@ -149,7 +290,8 @@ class ChallengeDetailsPage extends StatelessWidget {
             backgroundColor: AppColors.purple500,
             shape: const CircleBorder(),
             // onPressed: () => provider.refreshChallenge(),
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.createHabit, arguments: provider.challenge.id),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.createHabit,
+                arguments: provider.challenge.id),
             child: SvgPicture.asset(Assets.svg.plus.path, color: Colors.white),
           ),
         );

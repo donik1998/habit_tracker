@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "432542863754",
     "project_id": "habit-tracker-75462",
-    "storage_bucket": "habit-tracker-75462.appspot.com"
+    "storage_bucket": "habit-tracker-75462.firebasestorage.app"
   },
   "client": [
     {

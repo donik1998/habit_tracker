@@ -46,8 +46,15 @@ class $AssetsPngGen {
   /// File path: assets/png/mountains_back.jpg
   AssetGenImage get mountainsBack => const AssetGenImage('assets/png/mountains_back.jpg');
 
+  /// File path: assets/png/multi_color_ball.png
+  AssetGenImage get multiColorBall => const AssetGenImage('assets/png/multi_color_ball.png');
+
+  /// File path: assets/png/transparent_pattern.png
+  AssetGenImage get transparentPattern => const AssetGenImage('assets/png/transparent_pattern.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appIcon, aquaparkSmall, aquapark, mountainsBack];
+  List<AssetGenImage> get values =>
+      [appIcon, aquaparkSmall, aquapark, mountainsBack, multiColorBall, transparentPattern];
 }
 
 class $AssetsSvgGen {
@@ -71,8 +78,17 @@ class $AssetsSvgGen {
   /// File path: assets/svg/check.svg
   SvgGenImage get check => const SvgGenImage('assets/svg/check.svg');
 
+  /// File path: assets/svg/check_circle_green.svg
+  SvgGenImage get checkCircleGreen => const SvgGenImage('assets/svg/check_circle_green.svg');
+
+  /// File path: assets/svg/check_circle_orange.svg
+  SvgGenImage get checkCircleOrange => const SvgGenImage('assets/svg/check_circle_orange.svg');
+
   /// File path: assets/svg/close.svg
   SvgGenImage get close => const SvgGenImage('assets/svg/close.svg');
+
+  /// File path: assets/svg/close_filled.svg
+  SvgGenImage get closeFilled => const SvgGenImage('assets/svg/close_filled.svg');
 
   /// File path: assets/svg/code-browser.svg
   SvgGenImage get codeBrowser => const SvgGenImage('assets/svg/code-browser.svg');
@@ -88,6 +104,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/edit.svg
   SvgGenImage get edit => const SvgGenImage('assets/svg/edit.svg');
+
+  /// File path: assets/svg/edit_pencil.svg
+  SvgGenImage get editPencil => const SvgGenImage('assets/svg/edit_pencil.svg');
 
   /// File path: assets/svg/goals_tab.svg
   SvgGenImage get goalsTab => const SvgGenImage('assets/svg/goals_tab.svg');
@@ -118,6 +137,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/logo_white.svg
   SvgGenImage get logoWhite => const SvgGenImage('assets/svg/logo_white.svg');
+
+  /// File path: assets/svg/more_vert.svg
+  SvgGenImage get moreVert => const SvgGenImage('assets/svg/more_vert.svg');
 
   /// File path: assets/svg/notification_bell.svg
   SvgGenImage get notificationBell => const SvgGenImage('assets/svg/notification_bell.svg');
@@ -160,12 +182,16 @@ class $AssetsSvgGen {
         calendar,
         challengeTab,
         check,
+        checkCircleGreen,
+        checkCircleOrange,
         close,
+        closeFilled,
         codeBrowser,
         cross,
         directionsRun,
         directionsRunSmall,
         edit,
+        editPencil,
         goalsTab,
         habitsTab,
         information,
@@ -176,6 +202,7 @@ class $AssetsSvgGen {
         logOut,
         logoColored,
         logoWhite,
+        moreVert,
         notificationBell,
         playSquare,
         plus,

@@ -1028,9 +1028,9 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
       const VerificationMeta('challengeId');
   @override
   late final GeneratedColumn<int> challengeId = GeneratedColumn<int>(
-      'challenge_id', aliasedName, false,
+      'challenge_id', aliasedName, true,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES challenges (id)'));
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
@@ -1108,8 +1108,6 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
           _challengeIdMeta,
           challengeId.isAcceptableOrUnknown(
               data['challenge_id']!, _challengeIdMeta));
-    } else if (isInserting) {
-      context.missing(_challengeIdMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -1169,7 +1167,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       challengeId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}challenge_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}challenge_id']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       iconPath: attachedDatabase.typeMapping
@@ -1195,7 +1193,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, Habit> {
 
 class Habit extends DataClass implements Insertable<Habit> {
   final int id;
-  final int challengeId;
+  final int? challengeId;
   final String name;
   final String iconPath;
   final bool isCompleted;
@@ -1205,7 +1203,7 @@ class Habit extends DataClass implements Insertable<Habit> {
   final DateTime cacheTimestamp;
   const Habit(
       {required this.id,
-      required this.challengeId,
+      this.challengeId,
       required this.name,
       required this.iconPath,
       required this.isCompleted,
@@ -1217,7 +1215,9 @@ class Habit extends DataClass implements Insertable<Habit> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['challenge_id'] = Variable<int>(challengeId);
+    if (!nullToAbsent || challengeId != null) {
+      map['challenge_id'] = Variable<int>(challengeId);
+    }
     map['name'] = Variable<String>(name);
     map['icon_path'] = Variable<String>(iconPath);
     map['is_completed'] = Variable<bool>(isCompleted);
@@ -1231,7 +1231,9 @@ class Habit extends DataClass implements Insertable<Habit> {
   HabitsCompanion toCompanion(bool nullToAbsent) {
     return HabitsCompanion(
       id: Value(id),
-      challengeId: Value(challengeId),
+      challengeId: challengeId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(challengeId),
       name: Value(name),
       iconPath: Value(iconPath),
       isCompleted: Value(isCompleted),
@@ -1247,7 +1249,7 @@ class Habit extends DataClass implements Insertable<Habit> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Habit(
       id: serializer.fromJson<int>(json['id']),
-      challengeId: serializer.fromJson<int>(json['challengeId']),
+      challengeId: serializer.fromJson<int?>(json['challengeId']),
       name: serializer.fromJson<String>(json['name']),
       iconPath: serializer.fromJson<String>(json['iconPath']),
       isCompleted: serializer.fromJson<bool>(json['isCompleted']),
@@ -1262,7 +1264,7 @@ class Habit extends DataClass implements Insertable<Habit> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'challengeId': serializer.toJson<int>(challengeId),
+      'challengeId': serializer.toJson<int?>(challengeId),
       'name': serializer.toJson<String>(name),
       'iconPath': serializer.toJson<String>(iconPath),
       'isCompleted': serializer.toJson<bool>(isCompleted),
@@ -1275,7 +1277,7 @@ class Habit extends DataClass implements Insertable<Habit> {
 
   Habit copyWith(
           {int? id,
-          int? challengeId,
+          Value<int?> challengeId = const Value.absent(),
           String? name,
           String? iconPath,
           bool? isCompleted,
@@ -1285,7 +1287,7 @@ class Habit extends DataClass implements Insertable<Habit> {
           DateTime? cacheTimestamp}) =>
       Habit(
         id: id ?? this.id,
-        challengeId: challengeId ?? this.challengeId,
+        challengeId: challengeId.present ? challengeId.value : this.challengeId,
         name: name ?? this.name,
         iconPath: iconPath ?? this.iconPath,
         isCompleted: isCompleted ?? this.isCompleted,
@@ -1349,7 +1351,7 @@ class Habit extends DataClass implements Insertable<Habit> {
 
 class HabitsCompanion extends UpdateCompanion<Habit> {
   final Value<int> id;
-  final Value<int> challengeId;
+  final Value<int?> challengeId;
   final Value<String> name;
   final Value<String> iconPath;
   final Value<bool> isCompleted;
@@ -1370,7 +1372,7 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
   });
   HabitsCompanion.insert({
     this.id = const Value.absent(),
-    required int challengeId,
+    this.challengeId = const Value.absent(),
     required String name,
     required String iconPath,
     this.isCompleted = const Value.absent(),
@@ -1378,8 +1380,7 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
     required String description,
     required DateTime startDate,
     required DateTime cacheTimestamp,
-  })  : challengeId = Value(challengeId),
-        name = Value(name),
+  })  : name = Value(name),
         iconPath = Value(iconPath),
         colorHex = Value(colorHex),
         description = Value(description),
@@ -1411,7 +1412,7 @@ class HabitsCompanion extends UpdateCompanion<Habit> {
 
   HabitsCompanion copyWith(
       {Value<int>? id,
-      Value<int>? challengeId,
+      Value<int?>? challengeId,
       Value<String>? name,
       Value<String>? iconPath,
       Value<bool>? isCompleted,
@@ -2469,7 +2470,7 @@ typedef $$GoalsTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function({bool groupId})>;
 typedef $$HabitsTableCreateCompanionBuilder = HabitsCompanion Function({
   Value<int> id,
-  required int challengeId,
+  Value<int?> challengeId,
   required String name,
   required String iconPath,
   Value<bool> isCompleted,
@@ -2480,7 +2481,7 @@ typedef $$HabitsTableCreateCompanionBuilder = HabitsCompanion Function({
 });
 typedef $$HabitsTableUpdateCompanionBuilder = HabitsCompanion Function({
   Value<int> id,
-  Value<int> challengeId,
+  Value<int?> challengeId,
   Value<String> name,
   Value<String> iconPath,
   Value<bool> isCompleted,
@@ -2670,7 +2671,7 @@ class $$HabitsTableTableManager extends RootTableManager<
               $$HabitsTableOrderingComposer(ComposerState(db, table)),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<int> challengeId = const Value.absent(),
+            Value<int?> challengeId = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String> iconPath = const Value.absent(),
             Value<bool> isCompleted = const Value.absent(),
@@ -2692,7 +2693,7 @@ class $$HabitsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required int challengeId,
+            Value<int?> challengeId = const Value.absent(),
             required String name,
             required String iconPath,
             Value<bool> isCompleted = const Value.absent(),

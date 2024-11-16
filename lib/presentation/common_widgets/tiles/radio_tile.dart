@@ -10,6 +10,7 @@ class RadioTile extends StatelessWidget {
   final String value;
   final ValueChanged<bool> onChanged;
   final bool selected;
+  final bool transparent;
 
   const RadioTile({
     Key? key,
@@ -17,18 +18,36 @@ class RadioTile extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.selected = false,
+    this.transparent = false,
   }) : super(key: key);
+
+  const RadioTile.transparent({
+    Key? key,
+    required this.mask,
+    required this.value,
+    required this.onChanged,
+    this.selected = false,
+  })  : transparent = true,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final customTextTheme = context.customTextTheme;
 
     return Material(
-      color: selected ? AppColors.purple50 : Colors.transparent,
+      color: transparent
+          ? Colors.transparent
+          : selected
+              ? AppColors.purple50
+              : Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: selected ? AppColors.purple50 : AppColors.platinum100,
+          color: transparent
+              ? Colors.transparent
+              : selected
+                  ? AppColors.purple50
+                  : AppColors.platinum100,
           width: 1,
         ),
       ),
@@ -42,7 +61,9 @@ class RadioTile extends StatelessWidget {
             children: [
               AppSpacing.horizontal16,
               SvgPicture.asset(
-                selected ? Assets.svg.radioButtonSelected.path : Assets.svg.radioButtonUnselected.path,
+                selected
+                    ? Assets.svg.radioButtonSelected.path
+                    : Assets.svg.radioButtonUnselected.path,
               ),
               AppSpacing.horizontal10,
               Flexible(

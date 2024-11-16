@@ -49,10 +49,15 @@ class HabitsTab extends StatelessWidget {
                   }
 
                   return ListView.separated(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(16),
                     separatorBuilder: (context, index) => AppSpacing.vertical16,
                     itemBuilder: (context, index) => ChallengeHabitTile(
                       habit: snapshot.data!.elementAt(index),
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.habitDetails,
+                        arguments: snapshot.data!.elementAt(index),
+                      ),
                     ),
                     itemCount: snapshot.data!.length,
                   );
@@ -67,7 +72,7 @@ class HabitsTab extends StatelessWidget {
                   buttonText: LocaleKeys.create.tr(),
                   title: LocaleKeys.no_habits_yet.tr(),
                   description: LocaleKeys.habits_description.tr(),
-                  onTap: () => Navigator.pushNamed(context, AppRoutes.createGoalGroup),
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.createHabit),
                 ),
               ),
             ),

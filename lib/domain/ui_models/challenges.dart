@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 class ChallengeModel {
   final String title;
   final String iconPath;
@@ -36,21 +38,72 @@ class ChallengeModel {
       id: id ?? this.id,
     );
   }
+
+  List<HabitModel> get completedTodayHabits => habits
+      .where((element) => element.todayCompletenessStatus != HabitProgressStatus.notStarted)
+      .toList();
+
+  List<HabitModel> get notCompletedTodayHabits => habits
+      .where((element) => element.todayCompletenessStatus == HabitProgressStatus.notStarted)
+      .toList();
 }
 
 class HabitModel {
-  final int challengeId;
+  final int id;
+  final int? challengeId;
   final String title;
   final String description;
   final String iconPath;
-  final String hexColor;
+  final String color;
+  final List<HabitProgressModel> progress;
+
+  Color get uiColor => Color(int.parse(color, radix: 16));
+
+  DateTime? get startDate {
+    if (progress.isEmpty) return null;
+
+    return progress.fold<DateTime>(
+      progress.first.date,
+      (previousValue, element) =>
+          element.date.isBefore(previousValue) ? element.date : previousValue,
+    );
+  }
+
+  DateTime? get endDate {
+    if (progress.isEmpty) return null;
+
+    return progress.fold<DateTime>(
+      progress.first.date,
+      (previousValue, element) =>
+          element.date.isAfter(previousValue) ? element.date : previousValue,
+    );
+  }
+
+  int get completedDaysCount => progress
+      .where((element) =>
+          element.progress == HABIT_PROGRESS_COMPLETED ||
+          element.progress == HABIT_PROGRESS_HALF_DONE)
+      .length;
+
+  HabitProgressStatus get todayCompletenessStatus {
+    final today = DateTime.now();
+    if (progress.isEmpty) return HabitProgressStatus.notStarted;
+    final progressItem = progress.firstWhere(
+      (progressDataItem) => progressDataItem.date.isAtSameMomentAs(today),
+      orElse: () => HabitProgressModel.empty(),
+    );
+
+    return progressItem.progressStatus;
+  }
 
   HabitModel({
-    required this.challengeId,
+    this.id = -1,
+    this.challengeId,
     required this.title,
     required this.description,
     required this.iconPath,
-    required this.hexColor,
+    required this.color,
+    this.progress = const [],
   });
 
   HabitModel copyWith({
@@ -58,14 +111,78 @@ class HabitModel {
     String? title,
     String? description,
     String? iconPath,
-    String? hexColor,
+    String? color,
+    List<HabitProgressModel>? progress,
   }) {
     return HabitModel(
+      id: id,
       challengeId: challengeId ?? this.challengeId,
       title: title ?? this.title,
       description: description ?? this.description,
       iconPath: iconPath ?? this.iconPath,
-      hexColor: hexColor ?? this.hexColor,
+      color: color ?? this.color,
+      progress: progress ?? this.progress,
     );
   }
 }
+
+class HabitProgressModel {
+  final int id;
+  final int habitId;
+  final int dayCount;
+  final double progress;
+  final DateTime date;
+
+  HabitProgressModel({
+    required this.id,
+    required this.habitId,
+    required this.dayCount,
+    this.progress = HABIT_PROGRESS_INITIAL,
+    required this.date,
+  });
+
+  HabitProgressModel.empty()
+      : id = -1,
+        habitId = -1,
+        dayCount = -1,
+        progress = HABIT_PROGRESS_INITIAL,
+        date = DateTime.now();
+
+  bool get isEmpty => id == -1;
+
+  HabitProgressStatus get progressStatus => progress == HABIT_PROGRESS_COMPLETED
+      ? HabitProgressStatus.completed
+      : progress >= HABIT_PROGRESS_HALF_DONE
+          ? HabitProgressStatus.halfDone
+          : progress == HABIT_PROGRESS_INITIAL
+              ? HabitProgressStatus.initial
+              : HabitProgressStatus.notStarted;
+
+  HabitProgressModel copyWith({
+    int? id,
+    int? habitId,
+    int? dayCount,
+    double? progress,
+    DateTime? date,
+  }) {
+    return HabitProgressModel(
+      id: id ?? this.id,
+      habitId: habitId ?? this.habitId,
+      dayCount: dayCount ?? this.dayCount,
+      progress: progress ?? this.progress,
+      date: date ?? this.date,
+    );
+  }
+}
+
+enum HabitProgressStatus {
+  initial,
+  notStarted,
+  halfDone,
+  completed,
+}
+
+const double HABIT_PROGRESS_INITIAL = 0.0;
+const double HABIT_PROGRESS_COMPLETED = 1.0;
+const double HABIT_PROGRESS_HALF_DONE = 0.5;
+const double HABIT_PROGRESS_NOT_DONE = 0.1;

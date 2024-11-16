@@ -3,7 +3,7 @@ import 'package:habit_tracker/data/local/tables/challenges_table.dart';
 
 class Habits extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get challengeId => integer().references(Challenges, #id)();
+  IntColumn get challengeId => integer().nullable().references(Challenges, #id)();
   TextColumn get name => text()();
   TextColumn get iconPath => text()();
   BoolColumn get isCompleted => boolean().withDefault(const Constant(false))();

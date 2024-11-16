@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/domain/ui_models/challenges.dart';
+import 'package:habit_tracker/domain/ui_models/goals.dart';
 import 'package:habit_tracker/presentation/authentication/auth_selection_page.dart';
 import 'package:habit_tracker/presentation/authentication/forgot_password_page.dart';
 import 'package:habit_tracker/presentation/authentication/providers/forgot_password_page_provider.dart';
@@ -17,12 +18,18 @@ import 'package:habit_tracker/presentation/challenge/providers/challenge_details
 import 'package:habit_tracker/presentation/challenge/providers/challenge_info_provider.dart';
 import 'package:habit_tracker/presentation/error/unknown_page.dart';
 import 'package:habit_tracker/presentation/goal/create_goal_group_page.dart';
+import 'package:habit_tracker/presentation/goal/goal_group_page.dart';
 import 'package:habit_tracker/presentation/goal/providers/create_goal_group_provider.dart';
+import 'package:habit_tracker/presentation/goal/providers/goals_group_page_provider.dart';
 import 'package:habit_tracker/presentation/habit/create_habit_page.dart';
+import 'package:habit_tracker/presentation/habit/habit_details_page.dart';
 import 'package:habit_tracker/presentation/habit/provider/create_habit_provider.dart';
+import 'package:habit_tracker/presentation/habit/provider/habit_details_provider.dart';
 import 'package:habit_tracker/presentation/home/home_page.dart';
 import 'package:habit_tracker/presentation/home/providers/home_page_provider.dart';
 import 'package:habit_tracker/presentation/language_selection/language_selection_page.dart';
+import 'package:habit_tracker/presentation/profile/edit_profile_page.dart';
+import 'package:habit_tracker/presentation/profile/providers/edit_profile_provider.dart';
 import 'package:habit_tracker/presentation/start_screen/splash_page.dart';
 import 'package:provider/provider.dart';
 
@@ -43,6 +50,8 @@ class AppRoutes {
   static const String createHabit = '/create-habit';
   static const String createGoalGroup = '/create-goal';
   static const String goalPage = '/goal-page';
+  static const String habitDetails = '/habit-details';
+  static const String editProfile = '/edit-profile';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -120,7 +129,7 @@ class AppRoutes {
       case createHabit:
         return MaterialPageRoute(
           builder: (context) => ChangeNotifierProvider(
-            create: (_) => CreateHabitProvider(settings.arguments as int),
+            create: (_) => CreateHabitProvider(settings.arguments as int?),
             child: const CreateHabitPage(),
           ),
         );
@@ -137,6 +146,30 @@ class AppRoutes {
           builder: (context) => ChangeNotifierProvider(
             create: (_) => CreateGoalGroupProvider(),
             child: const CreateGoalGroupPage(),
+          ),
+          settings: settings,
+        );
+      case goalPage:
+        return MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (_) => GoalsGroupPageProvider(groupModel: settings.arguments as GoalGroupModel),
+            child: const GoalsGroupPage(),
+          ),
+          settings: settings,
+        );
+      case habitDetails:
+        return MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (_) => HabitDetailsProvider(habit: settings.arguments as HabitModel),
+            child: const HabitDetailsPage(),
+          ),
+          settings: settings,
+        );
+      case editProfile:
+        return MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (_) => EditProfileProvider(),
+            child: const EditProfilePage(),
           ),
           settings: settings,
         );

@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:432542863754:android:b44f4bb7323198aa24f873',
     messagingSenderId: '432542863754',
     projectId: 'habit-tracker-75462',
-    storageBucket: 'habit-tracker-75462.appspot.com',
+    storageBucket: 'habit-tracker-75462.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:432542863754:ios:ef78e83aa4aea6ed24f873',
     messagingSenderId: '432542863754',
     projectId: 'habit-tracker-75462',
-    storageBucket: 'habit-tracker-75462.appspot.com',
+    storageBucket: 'habit-tracker-75462.firebasestorage.app',
     iosBundleId: 'com.habits.tracker.habitTracker',
   );
 

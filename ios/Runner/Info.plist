@@ -20,6 +20,10 @@
 		<string>ru</string>
 		<string>uz</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We provide users ability to customize their profile</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We provide users ability to customize their profile using photos taken from camera</string>
 	<key>CFBundleName</key>
 	<string>habit_tracker</string>
 	<key>CFBundlePackageType</key>

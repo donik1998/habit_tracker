@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:habit_tracker/domain/routing.dart';
 import 'package:habit_tracker/gen/assets.gen.dart';
 import 'package:habit_tracker/generated/locale_keys.g.dart';
 import 'package:habit_tracker/presentation/common_widgets/cards/profile_card.dart';
+import 'package:habit_tracker/presentation/common_widgets/language_selector_sheet.dart';
 import 'package:habit_tracker/presentation/common_widgets/tiles/profile_menu_item.dart';
 import 'package:habit_tracker/presentation/home/providers/profile_tab_provider.dart';
 import 'package:habit_tracker/presentation/theme/app_spacing.dart';
@@ -37,7 +39,7 @@ class ProfileTab extends StatelessWidget {
                         name: provider.currentUser?.displayName ?? '',
                         email: provider.currentUser?.email ?? '',
                         avatarPath: provider.currentUser?.photoURL ?? '',
-                        onEditProfile: () {},
+                        onEditProfile: () => Navigator.pushNamed(context, AppRoutes.editProfile),
                       ),
                     ],
                   ),
@@ -68,7 +70,12 @@ class ProfileTab extends StatelessWidget {
                   ),
                   AppSpacing.vertical8,
                   ProfileMenuItem(
-                    onTap: () {},
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      builder: (context) => LanguageSelectorSheet(
+                        currentLangCode: context.locale.languageCode,
+                      ),
+                    ),
                     icon: Assets.svg.translate,
                     title: LocaleKeys.language.tr(),
                   ),

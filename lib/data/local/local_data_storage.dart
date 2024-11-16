@@ -17,10 +17,12 @@ class LocalDatabase extends _$LocalDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
   // and a constructor telling drift where the database should be stored.
   // These are described in the getting started guide: https://drift.simonbinder.eu/getting-started/#open
-  LocalDatabase() : super(_openConnection());
+  LocalDatabase._() : super(_openConnection());
+
+  static LocalDatabase instance = LocalDatabase._();
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   static QueryExecutor _openConnection() {
     return LazyDatabase(() async {

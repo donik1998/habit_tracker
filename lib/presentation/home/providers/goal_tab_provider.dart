@@ -6,4 +6,8 @@ import 'package:habit_tracker/domain/ui_models/goals.dart';
 class GoalsTabProvider extends ChangeNotifier {
   LocalDatabaseRepository get localDatabaseRepository => locator<LocalDatabaseRepository>();
   late final Stream<List<GoalGroupModel>> goalsStream = localDatabaseRepository.watchGoalGroups();
+
+  Future<void> refreshGoals() async {
+    notifyListeners();
+  }
 }

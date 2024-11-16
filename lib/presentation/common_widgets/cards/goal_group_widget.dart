@@ -10,8 +10,14 @@ import 'package:habit_tracker/utils/theme_extension.dart';
 class GoalGroupWidget extends StatelessWidget {
   final GoalGroupModel goalGroup;
   final VoidCallback? onTap;
+  final VoidCallback? onDone;
 
-  const GoalGroupWidget({super.key, required this.goalGroup, this.onTap});
+  const GoalGroupWidget({
+    super.key,
+    required this.goalGroup,
+    this.onTap,
+    this.onDone,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class GoalGroupWidget extends StatelessWidget {
     return Material(
       color: Colors.white,
       clipBehavior: Clip.hardEdge,
-      borderRadius: BorderRadius.all(Radius.circular(20)),
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
       child: InkWell(
         onTap: () {
           onTap?.call();
@@ -28,7 +34,7 @@ class GoalGroupWidget extends StatelessWidget {
             context,
             AppRoutes.goalPage,
             arguments: goalGroup,
-          );
+          ).whenComplete(() => onDone?.call());
         },
         child: Ink(
           padding: EdgeInsets.all(16.0),
