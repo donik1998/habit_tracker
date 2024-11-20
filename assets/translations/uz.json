@@ -108,6 +108,12 @@
     "one": "Siz mashqqatning {} kunidasiz!",
     "many": "Siz mashqqatning {} kunidasiz!",
     "other": "Siz mashqqatning {} kunidasiz!"
-  }
+  },
+  "finish": "Yakunlash",
+  "go_to_main": "Bosh sahifaga o'tish",
+  "review": "Ko'rib chiqish",
+  "finished_challenge_text": "21-kunlik mashaqqatni yakunlaganingizga tabriklaymiz!",
+  "total_progress": "Umumiy progress",
+  "completed_challenge_message": "21-kunlik mashqqatni yakunlagan!"
 
 }

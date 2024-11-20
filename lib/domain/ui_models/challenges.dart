@@ -8,6 +8,7 @@ class ChallengeModel {
   final int progress;
   final List<HabitModel> habits;
   final int id;
+  final bool isCompleted;
 
   ChallengeModel({
     required this.id,
@@ -17,6 +18,7 @@ class ChallengeModel {
     required this.startDate,
     required this.progress,
     required this.habits,
+    required this.isCompleted,
   });
 
   ChallengeModel copyWith({
@@ -27,6 +29,7 @@ class ChallengeModel {
     int? progress,
     List<HabitModel>? habits,
     int? id,
+    bool? isCompleted,
   }) {
     return ChallengeModel(
       title: title ?? this.title,
@@ -36,8 +39,11 @@ class ChallengeModel {
       progress: progress ?? this.progress,
       habits: habits ?? this.habits,
       id: id ?? this.id,
+      isCompleted: isCompleted ?? this.isCompleted,
     );
   }
+
+  bool get canFinish => duration == progress;
 
   List<HabitModel> get completedTodayHabits => habits
       .where((element) =>

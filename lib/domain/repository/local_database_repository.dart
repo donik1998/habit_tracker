@@ -49,7 +49,9 @@ class LocalDatabaseRepository {
   }
 
   Stream<List<ChallengeModel>> watchChallenges() async* {
-    yield* _database.select(_database.challenges).watch().asyncMap((event) async {
+    yield* (_database.select(_database.challenges)..where((tbl) => tbl.isCompleted.equals(false)))
+        .watch()
+        .asyncMap((event) async {
       final challenges = List<ChallengeModel>.empty(growable: true);
       final challengesFutures = event.map(
         (e) => Future(() async {
@@ -61,6 +63,7 @@ class LocalDatabaseRepository {
             duration: e.durationInDays,
             startDate: e.startDate,
             progress: e.startDate.difference(DateTime.now()).inDays.abs(),
+            isCompleted: e.isCompleted,
             habits: allHabits,
           );
         }).then((value) => challenges.add(value)),
@@ -154,6 +157,7 @@ class LocalDatabaseRepository {
       duration: challenge.durationInDays,
       startDate: challenge.startDate,
       progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
+      isCompleted: challenge.isCompleted,
       habits: habits,
     );
   }
@@ -221,6 +225,7 @@ class LocalDatabaseRepository {
         duration: challenge.durationInDays,
         startDate: challenge.startDate,
         progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
+        isCompleted: challenge.isCompleted,
         habits: [],
       );
     }).toList();
@@ -328,5 +333,10 @@ class LocalDatabaseRepository {
         date: progress.date,
       );
     }).toList();
+  }
+
+  Future<void> finishChallenge(int challengeId) async {
+    await (_database.update(_database.challenges)..where((tbl) => tbl.id.equals(challengeId)))
+        .write(const ChallengesCompanion(isCompleted: Value(true)));
   }
 }

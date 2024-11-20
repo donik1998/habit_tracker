@@ -14,6 +14,7 @@ import 'package:habit_tracker/presentation/challenge/create_challenge/create_cha
 import 'package:habit_tracker/presentation/challenge/create_challenge/create_challenge_screen.dart';
 import 'package:habit_tracker/presentation/challenge/edit_challenge/edit_challenge_page.dart';
 import 'package:habit_tracker/presentation/challenge/edit_challenge/edit_challenge_provider.dart';
+import 'package:habit_tracker/presentation/challenge/finished_challenge/finished_challenge_details_page.dart';
 import 'package:habit_tracker/presentation/challenge/providers/challenge_details_provider.dart';
 import 'package:habit_tracker/presentation/challenge/providers/challenge_info_provider.dart';
 import 'package:habit_tracker/presentation/error/unknown_page.dart';
@@ -52,6 +53,7 @@ class AppRoutes {
   static const String goalPage = '/goal-page';
   static const String habitDetails = '/habit-details';
   static const String editProfile = '/edit-profile';
+  static const String finishedChallengeDetails = '/finished-challenge-details';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -170,6 +172,13 @@ class AppRoutes {
           builder: (context) => ChangeNotifierProvider(
             create: (_) => EditProfileProvider(),
             child: const EditProfilePage(),
+          ),
+          settings: settings,
+        );
+      case finishedChallengeDetails:
+        return MaterialPageRoute(
+          builder: (context) => FinishedChallengeDetailsPage(
+            challenge: settings.arguments as ChallengeModel,
           ),
           settings: settings,
         );

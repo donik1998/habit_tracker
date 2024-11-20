@@ -9,7 +9,9 @@ import 'package:habit_tracker/generated/locale_keys.g.dart';
 import 'package:habit_tracker/presentation/challenge/challenge_details_tabs/daily_habits_tab.dart';
 import 'package:habit_tracker/presentation/challenge/challenge_details_tabs/overall_habit_list.dart';
 import 'package:habit_tracker/presentation/challenge/challenge_details_tabs/week_habits_list.dart';
+import 'package:habit_tracker/presentation/challenge/finished_challenge/finished_challenge_preview.dart';
 import 'package:habit_tracker/presentation/challenge/providers/challenge_details_provider.dart';
+import 'package:habit_tracker/presentation/common_widgets/buttons/standart_button.dart';
 import 'package:habit_tracker/presentation/common_widgets/tiles/iconed_row_with_action.dart';
 import 'package:habit_tracker/presentation/common_widgets/week_selector.dart';
 import 'package:habit_tracker/presentation/common_widgets/wrappers/bottom_sheet_wrapper.dart';
@@ -29,6 +31,10 @@ class ChallengeDetailsPage extends StatelessWidget {
       builder: (context, provider, child) {
         if (provider.loading) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        } else if (provider.challenge.isCompleted) {
+          return FinishedChallengePreview(
+            challenge: provider.challenge,
+          );
         }
         return Scaffold(
           appBar: AppBar(
@@ -301,6 +307,15 @@ class ChallengeDetailsPage extends StatelessWidget {
                 .then((value) => provider.refreshChallenge()),
             child: SvgPicture.asset(Assets.svg.plus.path, color: Colors.white),
           ),
+          bottomNavigationBar: !provider.challenge.canFinish
+              ? SafeArea(
+                  minimum: const EdgeInsets.all(16),
+                  child: StandardButton(
+                    onPressed: provider.finishChallenge,
+                    text: LocaleKeys.finish.tr(),
+                  ),
+                )
+              : null,
         );
       },
     );

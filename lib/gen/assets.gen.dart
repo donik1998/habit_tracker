@@ -174,6 +174,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/splash_logo.svg
   SvgGenImage get splashLogo => const SvgGenImage('assets/svg/splash_logo.svg');
 
+  /// File path: assets/svg/throphy.svg
+  SvgGenImage get throphy => const SvgGenImage('assets/svg/throphy.svg');
+
   /// File path: assets/svg/translate.svg
   SvgGenImage get translate => const SvgGenImage('assets/svg/translate.svg');
 
@@ -220,6 +223,7 @@ class $AssetsSvgGen {
         rocket,
         settings,
         splashLogo,
+        throphy,
         translate,
         visible
       ];

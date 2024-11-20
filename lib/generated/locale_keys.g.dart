@@ -98,6 +98,13 @@ abstract class  LocaleKeys {
   static const habit_fifty_done = 'habit_fifty_done';
   static const habit_hundred_done = 'habit_hundred_done';
   static const completed = 'completed';
+  static const you_are_ont_x_th_day_three = 'you_are_ont_x_th_day.three';
   static const you_are_ont_x_th_day = 'you_are_ont_x_th_day';
+  static const finish = 'finish';
+  static const go_to_main = 'go_to_main';
+  static const review = 'review';
+  static const finished_challenge_text = 'finished_challenge_text';
+  static const total_progress = 'total_progress';
+  static const completed_challenge_message = 'completed_challenge_message';
 
 }

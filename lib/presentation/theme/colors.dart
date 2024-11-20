@@ -4,7 +4,9 @@ class AppColors {
   AppColors._();
 
   static const orange500 = Color(0xffFF920A);
+  static const green50 = Color(0xffE8FFE4);
   static const green500 = Color(0xff00DD00);
+  static const green900 = Color(0xff0C5B11);
   static const purple900 = Color(0xff1B0E45);
   static const purple500 = Color(0xff7E49FF);
   static const purple50 = Color(0xffF5F2FF);
@@ -30,5 +32,6 @@ class AppColors {
   static const disabledText = Color(0xffCBD5E1);
   static const customScaffold = Color(0xffEFF2F6);
   static const grey = Color(0xffD9D9D9);
+  static const grey50 = Color(0xffF6F6F6);
   static const someWhite = Color(0xffF1F4FF);
 }

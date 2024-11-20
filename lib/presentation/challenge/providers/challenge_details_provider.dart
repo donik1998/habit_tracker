@@ -75,6 +75,11 @@ class ChallengeDetailsProvider extends ChangeNotifier {
     });
   }
 
+  Future<void> finishChallenge() async {
+    await localDatabaseRepository.finishChallenge(challengeId);
+    await refreshChallenge();
+  }
+
   Future<void> refreshChallenge() async {
     loading = true;
     notifyListeners();
