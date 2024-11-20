@@ -40,11 +40,15 @@ class ChallengeModel {
   }
 
   List<HabitModel> get completedTodayHabits => habits
-      .where((element) => element.todayCompletenessStatus != HabitProgressStatus.notStarted)
+      .where((element) =>
+          element.todayCompletenessStatus != HabitProgressStatus.notStarted &&
+          element.todayCompletenessStatus != HabitProgressStatus.initial)
       .toList();
 
   List<HabitModel> get notCompletedTodayHabits => habits
-      .where((element) => element.todayCompletenessStatus == HabitProgressStatus.notStarted)
+      .where((element) =>
+          element.todayCompletenessStatus == HabitProgressStatus.notStarted ||
+          element.todayCompletenessStatus == HabitProgressStatus.initial)
       .toList();
 }
 
@@ -96,6 +100,15 @@ class HabitModel {
     return progressItem.progressStatus;
   }
 
+  HabitProgressModel get todayProgress {
+    final today = DateTime.now();
+    if (progress.isEmpty) return HabitProgressModel.empty();
+    return progress.firstWhere(
+      (progressDataItem) => progressDataItem.date.isAtSameMomentAs(today),
+      orElse: () => HabitProgressModel.empty(),
+    );
+  }
+
   HabitModel({
     this.id = -1,
     this.challengeId,
@@ -124,6 +137,19 @@ class HabitModel {
       progress: progress ?? this.progress,
     );
   }
+
+  factory HabitModel.empty() {
+    return HabitModel(
+      id: -1,
+      title: '',
+      description: '',
+      iconPath: '',
+      color: '',
+      progress: [],
+    );
+  }
+
+  bool get isEmpty => id == -1;
 }
 
 class HabitProgressModel {

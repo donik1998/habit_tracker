@@ -102,5 +102,11 @@
   "habit_not_done": "0%",
   "habit_fifty_done":"50%",
   "habit_hundred_done": "100%",
-  "completed": "Completed"
+  "completed": "Completed",
+  "you_are_ont_x_th_day": {
+    "zero": "You are on {}th day of challenge!",
+    "one": "You are on {}st day of challenge!",
+    "many": "You are on {}th day of challenge!",
+    "other": "You are on {}th day of challenge!"
+  }
 }

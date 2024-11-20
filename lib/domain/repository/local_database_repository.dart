@@ -97,7 +97,8 @@ class LocalDatabaseRepository {
     await (_database.update(_database.habitRecords)
           ..where((tbl) => tbl.habitId.equals(habitId))
           ..where((tbl) => tbl.id.equals(progressId)))
-        .write(HabitRecordsCompanion(progress: Value(progress)));
+        .write(HabitRecordsCompanion(progress: Value(progress)))
+        .then((value) => print(value));
   }
 
   Future<List<GoalModel>> fetchGoalsByGroupId(int id) async {
@@ -119,16 +120,22 @@ class LocalDatabaseRepository {
             (habit) => habit.challengeId.equals(challengeId),
           ))
         .get();
-    return habits.map((habit) {
-      return HabitModel(
-        id: habit.id,
-        title: habit.name,
-        iconPath: habit.iconPath,
-        challengeId: habit.challengeId,
-        description: habit.description,
-        color: habit.colorHex,
-      );
-    }).toList();
+    final result = List<HabitModel>.empty(growable: true);
+    final habitProgressFutures = habits.map((habit) => fetchHabitProgress(habit.id).then(
+          (habitProgress) => result.add(
+            HabitModel(
+              id: habit.id,
+              title: habit.name,
+              iconPath: habit.iconPath,
+              challengeId: habit.challengeId,
+              description: habit.description,
+              color: habit.colorHex,
+              progress: habitProgress,
+            ),
+          ),
+        ));
+    await Future.wait(habitProgressFutures);
+    return result;
   }
 
   Future<ChallengeModel> fetchChallengeById(int challengeId) async {

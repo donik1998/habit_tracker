@@ -8,7 +8,10 @@ class ChallengeDetailsProvider extends ChangeNotifier {
   LocalDatabaseRepository get localDatabaseRepository => locator<LocalDatabaseRepository>();
   late ChallengeModel challenge;
   ValueNotifier<DateTimeRange> selectedWeekNotifier = ValueNotifier(
-    DateTimeRange(start: DateTime.now(), end: DateTime.now()),
+    DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now(),
+    ),
   );
   bool loading = true;
   String selectedHabitsDisplayingMode = ChallengeHabitsDisplayingMode.daily;
@@ -27,7 +30,30 @@ class ChallengeDetailsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> markDailyProgress(int habitId, double progress) async {}
+  Future<void> markDailyProgress({
+    required int habitId,
+    required int progressHabitId,
+    required double progress,
+  }) async {
+    final today = DateTime.now();
+    final habit = challenge.habits.firstWhere(
+      (element) => element.id == habitId,
+      orElse: () => HabitModel.empty(),
+    );
+    if (habit.isEmpty) return;
+    final habitProgress = habit.progress.firstWhere(
+      (element) => element.id == progressHabitId,
+      orElse: () => HabitProgressModel.empty(),
+    );
+    if (habitProgress.isEmpty) return;
+
+    await localDatabaseRepository.editHabitProgress(
+      habitId: habitId,
+      progressId: habitProgress.id,
+      progress: progress,
+    );
+    await refreshChallenge();
+  }
 
   void selectWeek(DateTimeRange week) {
     selectedWeekNotifier.value = week;

@@ -98,5 +98,6 @@ abstract class  LocaleKeys {
   static const habit_fifty_done = 'habit_fifty_done';
   static const habit_hundred_done = 'habit_hundred_done';
   static const completed = 'completed';
+  static const you_are_ont_x_th_day = 'you_are_ont_x_th_day';
 
 }

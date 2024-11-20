@@ -5,6 +5,7 @@ import 'package:habit_tracker/domain/ui_models/challenges.dart';
 import 'package:habit_tracker/generated/locale_keys.g.dart';
 import 'package:habit_tracker/presentation/common_widgets/tiles/challenge_habit_tile.dart';
 import 'package:habit_tracker/presentation/common_widgets/titled_divider.dart';
+import 'package:habit_tracker/presentation/theme/app_spacing.dart';
 import 'package:habit_tracker/presentation/theme/colors.dart';
 
 class DailyHabitsTab extends StatelessWidget {
@@ -72,11 +73,10 @@ class DailyHabitsTab extends StatelessWidget {
           ),
         ),
         if (completedTodayHabits.isNotEmpty)
-          SliverToBoxAdapter(
-            child: TitledDivider(
-              title: LocaleKeys.completed.tr(),
-            ),
+          TitledDivider(
+            title: LocaleKeys.completed.tr(),
           ),
+        if (completedTodayHabits.isNotEmpty) AppSpacing.vertical16,
         ...completedTodayHabits.map(
           (habit) => Padding(
             padding: const EdgeInsets.only(bottom: 12.0),

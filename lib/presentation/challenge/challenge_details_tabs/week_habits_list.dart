@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/domain/ui_models/challenges.dart';
 import 'package:habit_tracker/presentation/common_widgets/cards/habit_detailed_card.dart';
 import 'package:habit_tracker/presentation/common_widgets/cards/habit_weekly_details.dart';
+import 'package:habit_tracker/utils/date_time_range_extension.dart';
 
 class WeeklyTilesList extends StatelessWidget {
   final List<HabitModel> habits;
@@ -34,7 +35,8 @@ class WeeklyTilesList extends StatelessWidget {
                   builder: (context, value, child) {
                     final selectedWeekProgressItems = habit.progress
                         .where((item) =>
-                            item.date.isAfter(value.start) && item.date.isBefore(value.end))
+                            item.date.isSameDayOrAfter(value.start) &&
+                            item.date.isSameDayOrBefore(value.end))
                         .toList();
                     final additionalProgressItems = List.generate(
                       7 - selectedWeekProgressItems.length,

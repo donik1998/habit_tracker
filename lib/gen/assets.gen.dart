@@ -84,6 +84,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/check_circle_orange.svg
   SvgGenImage get checkCircleOrange => const SvgGenImage('assets/svg/check_circle_orange.svg');
 
+  /// File path: assets/svg/chevron-left.svg
+  SvgGenImage get chevronLeft => const SvgGenImage('assets/svg/chevron-left.svg');
+
+  /// File path: assets/svg/chevron-right.svg
+  SvgGenImage get chevronRight => const SvgGenImage('assets/svg/chevron-right.svg');
+
   /// File path: assets/svg/close.svg
   SvgGenImage get close => const SvgGenImage('assets/svg/close.svg');
 
@@ -184,6 +190,8 @@ class $AssetsSvgGen {
         check,
         checkCircleGreen,
         checkCircleOrange,
+        chevronLeft,
+        chevronRight,
         close,
         closeFilled,
         codeBrowser,

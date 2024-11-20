@@ -160,104 +160,110 @@ class ChallengeDetailsPage extends StatelessWidget {
                           style: textTheme?.boldTextTheme.typography5,
                         ),
                 ),
-                SliverToBoxAdapter(
+                const SliverToBoxAdapter(
                   child: AppSpacing.vertical16,
                 ),
+                if (provider.selectedHabitsDisplayingMode == ChallengeHabitsDisplayingMode.weekly &&
+                    provider.challenge.habits.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: WeekSelector(
+                      onWeekSelected: provider.selectWeek,
+                    ),
+                  ),
                 if (provider.selectedHabitsDisplayingMode == ChallengeHabitsDisplayingMode.daily &&
                     provider.challenge.habits.isNotEmpty)
                   SliverToBoxAdapter(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
-                      transitionBuilder: (child, animation) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(1, 0),
-                            end: Offset.zero,
-                          ).animate(animation),
-                          child: child,
-                        );
-                      },
-                      child: provider.selectedHabitsDisplayingMode !=
-                              ChallengeHabitsDisplayingMode.weekly
-                          ? Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${LocaleKeys.today.tr()} ${DateFormat('dd MMMM', context.locale.languageCode).format(DateTime.now())}',
-                                  style: textTheme?.boldTextTheme.typography6,
-                                ),
-                                if (provider.selectedHabitsDisplayingMode !=
-                                    ChallengeHabitsDisplayingMode.weekly)
-                                  Text(
-                                    '${provider.challenge.startDate.difference(DateTime.now()).inDays.abs()}/21',
-                                    style: textTheme?.boldTextTheme.typography6,
-                                  ),
-                              ],
-                            )
-                          : WeekSelector(
-                              onWeekSelected: provider.selectWeek,
-                            ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${LocaleKeys.today.tr()} ${DateFormat('dd MMMM', context.locale.languageCode).format(DateTime.now())}',
+                          style: textTheme?.boldTextTheme.typography6,
+                        ),
+                        Text(
+                          '${provider.challenge.startDate.difference(DateTime.now()).inDays.abs()}/21',
+                          style: textTheme?.boldTextTheme.typography6,
+                        ),
+                      ],
                     ),
                   ),
-                SliverToBoxAdapter(
+                if (provider.selectedHabitsDisplayingMode ==
+                        ChallengeHabitsDisplayingMode.overall &&
+                    provider.challenge.habits.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: Text(
+                      plural(
+                        LocaleKeys.you_are_ont_x_th_day,
+                        provider.challenge.startDate.difference(DateTime.now()).inDays.abs(),
+                      ),
+                      style: textTheme?.boldTextTheme.typography6,
+                    ),
+                  ),
+                const SliverToBoxAdapter(
                   child: AppSpacing.vertical16,
                 ),
                 SliverToBoxAdapter(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    transitionBuilder: (child, animation) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(1, 0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                    child: provider.selectedHabitsDisplayingMode ==
-                            ChallengeHabitsDisplayingMode.daily
-                        ? DailyHabitsTab(
-                            notCompletedTodayHabits: provider.challenge.notCompletedTodayHabits,
-                            completedTodayHabits: provider.challenge.completedTodayHabits,
-                            onDone: (habit) => provider.markDailyProgress(
-                              habit.id,
-                              HABIT_PROGRESS_NOT_DONE,
+                  child: provider.selectedHabitsDisplayingMode ==
+                          ChallengeHabitsDisplayingMode.daily
+                      ? DailyHabitsTab(
+                          notCompletedTodayHabits: provider.challenge.notCompletedTodayHabits,
+                          completedTodayHabits: provider.challenge.completedTodayHabits,
+                          onDone: (habit) => provider.markDailyProgress(
+                            habitId: habit.id,
+                            progress: HABIT_PROGRESS_NOT_DONE,
+                            progressHabitId: habit.todayProgress.id,
+                          ),
+                          onHalfDone: (habit) => provider.markDailyProgress(
+                            habitId: habit.id,
+                            progress: HABIT_PROGRESS_HALF_DONE,
+                            progressHabitId: habit.todayProgress.id,
+                          ),
+                          onNotDone: (habit) => provider.markDailyProgress(
+                            habitId: habit.id,
+                            progress: HABIT_PROGRESS_COMPLETED,
+                            progressHabitId: habit.todayProgress.id,
+                          ),
+                        )
+                      : provider.selectedHabitsDisplayingMode ==
+                              ChallengeHabitsDisplayingMode.weekly
+                          ? WeeklyTilesList(
+                              selectedWeekNotifier: provider.selectedWeekNotifier,
+                              habits: provider.challenge.habits,
+                              onDone: (habitProgressId, habitId) => provider.markWeeklyProgress(
+                                habitId: habitId,
+                                habitProgressId: habitProgressId,
+                                progress: HABIT_PROGRESS_COMPLETED,
+                              ),
+                              onHalfDone: (habitProgressId, habitId) => provider.markWeeklyProgress(
+                                habitId: habitId,
+                                habitProgressId: habitProgressId,
+                                progress: HABIT_PROGRESS_HALF_DONE,
+                              ),
+                              onNotDone: (habitProgressId, habitId) => provider.markWeeklyProgress(
+                                habitId: habitId,
+                                habitProgressId: habitProgressId,
+                                progress: HABIT_PROGRESS_NOT_DONE,
+                              ),
+                            )
+                          : OverallTilesList(
+                              habits: provider.challenge.habits,
+                              onDone: (habitProgressId, habitId) => provider.markDailyProgress(
+                                habitId: habitId,
+                                progressHabitId: habitProgressId,
+                                progress: HABIT_PROGRESS_COMPLETED,
+                              ),
+                              onHalfDone: (habitProgressId, habitId) => provider.markDailyProgress(
+                                habitId: habitId,
+                                progressHabitId: habitProgressId,
+                                progress: HABIT_PROGRESS_HALF_DONE,
+                              ),
+                              onNotDone: (habitProgressId, habitId) => provider.markDailyProgress(
+                                habitId: habitId,
+                                progressHabitId: habitProgressId,
+                                progress: HABIT_PROGRESS_NOT_DONE,
+                              ),
                             ),
-                            onHalfDone: (habit) => provider.markDailyProgress(
-                              habit.id,
-                              HABIT_PROGRESS_HALF_DONE,
-                            ),
-                            onNotDone: (habit) => provider.markDailyProgress(
-                              habit.id,
-                              HABIT_PROGRESS_COMPLETED,
-                            ),
-                          )
-                        : provider.selectedHabitsDisplayingMode ==
-                                ChallengeHabitsDisplayingMode.weekly
-                            ? WeeklyTilesList(
-                                selectedWeekNotifier: provider.selectedWeekNotifier,
-                                habits: provider.challenge.habits,
-                                onDone: (habitProgressId, habitId) => provider.markWeeklyProgress(
-                                  habitId: habitId,
-                                  habitProgressId: habitProgressId,
-                                  progress: HABIT_PROGRESS_COMPLETED,
-                                ),
-                                onHalfDone: (habitProgressId, habitId) =>
-                                    provider.markWeeklyProgress(
-                                  habitId: habitId,
-                                  habitProgressId: habitProgressId,
-                                  progress: HABIT_PROGRESS_HALF_DONE,
-                                ),
-                                onNotDone: (habitProgressId, habitId) =>
-                                    provider.markWeeklyProgress(
-                                  habitId: habitId,
-                                  habitProgressId: habitProgressId,
-                                  progress: HABIT_PROGRESS_NOT_DONE,
-                                ),
-                              )
-                            : OverallTilesList(),
-                  ),
                 ),
                 if (provider.challenge.habits.isEmpty)
                   SliverToBoxAdapter(
@@ -291,7 +297,8 @@ class ChallengeDetailsPage extends StatelessWidget {
             shape: const CircleBorder(),
             // onPressed: () => provider.refreshChallenge(),
             onPressed: () => Navigator.pushNamed(context, AppRoutes.createHabit,
-                arguments: provider.challenge.id),
+                    arguments: provider.challenge.id)
+                .then((value) => provider.refreshChallenge()),
             child: SvgPicture.asset(Assets.svg.plus.path, color: Colors.white),
           ),
         );
