@@ -43,6 +43,8 @@ class ChallengeModel {
     );
   }
 
+  DateTime get endDate => startDate.add(Duration(days: duration));
+
   bool get canFinish => duration == progress;
 
   List<HabitModel> get completedTodayHabits => habits

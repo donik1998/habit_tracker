@@ -5,6 +5,7 @@ import 'package:habit_tracker/gen/assets.gen.dart';
 import 'package:habit_tracker/generated/locale_keys.g.dart';
 import 'package:habit_tracker/presentation/common_widgets/cards/profile_card.dart';
 import 'package:habit_tracker/presentation/common_widgets/language_selector_sheet.dart';
+import 'package:habit_tracker/presentation/common_widgets/logout_sheet.dart';
 import 'package:habit_tracker/presentation/common_widgets/tiles/profile_menu_item.dart';
 import 'package:habit_tracker/presentation/home/providers/profile_tab_provider.dart';
 import 'package:habit_tracker/presentation/theme/app_spacing.dart';
@@ -58,7 +59,7 @@ class ProfileTab extends StatelessWidget {
                   ),
                   AppSpacing.vertical8,
                   ProfileMenuItem(
-                    onTap: () {},
+                    onTap: () => Navigator.pushNamed(context, AppRoutes.finishedChallengesPage),
                     icon: Assets.svg.lineChartUp,
                     title: LocaleKeys.finished_challenges.tr(),
                   ),
@@ -81,13 +82,24 @@ class ProfileTab extends StatelessWidget {
                   ),
                   AppSpacing.vertical8,
                   ProfileMenuItem(
-                    onTap: () {},
+                    onTap: () => Navigator.pushNamed(context, AppRoutes.applicationSettings),
                     icon: Assets.svg.settings,
                     title: LocaleKeys.settings.tr(),
                   ),
                   AppSpacing.vertical8,
                   ProfileMenuItem(
-                    onTap: () {},
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      builder: (context) => LogoutSheet(
+                        onLogout: () => provider.logout().then(
+                              (success) => Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                AppRoutes.signIn,
+                                (route) => false,
+                              ),
+                            ),
+                      ),
+                    ),
                     icon: Assets.svg.logOut,
                     title: LocaleKeys.log_out.tr(),
                     color: AppColors.red800,

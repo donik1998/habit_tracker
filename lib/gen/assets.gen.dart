@@ -135,6 +135,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/line_chart_up.svg
   SvgGenImage get lineChartUp => const SvgGenImage('assets/svg/line_chart_up.svg');
 
+  /// File path: assets/svg/log-out-thin.svg
+  SvgGenImage get logOutThin => const SvgGenImage('assets/svg/log-out-thin.svg');
+
   /// File path: assets/svg/log_out.svg
   SvgGenImage get logOut => const SvgGenImage('assets/svg/log_out.svg');
 
@@ -210,6 +213,7 @@ class $AssetsSvgGen {
         invisible,
         lightning,
         lineChartUp,
+        logOutThin,
         logOut,
         logoColored,
         logoWhite,

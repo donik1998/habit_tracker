@@ -21,19 +21,19 @@ class HomePage extends StatelessWidget {
   final List<Widget> _pages = [
     ChangeNotifierProvider(
       create: (_) => ChallengeTabProvider(),
-      child: ChallengesTab(),
+      child: const ChallengesTab(),
     ),
     ChangeNotifierProvider(
       create: (_) => GoalsTabProvider(),
-      child: GoalsTab(),
+      child: const GoalsTab(),
     ),
     ChangeNotifierProvider(
       create: (_) => HabitsTabProvider(),
-      child: HabitsTab(),
+      child: const HabitsTab(),
     ),
     ChangeNotifierProvider(
       create: (_) => ProfileTabProvider(),
-      child: ProfileTab(),
+      child: const ProfileTab(),
     ),
   ];
 
@@ -52,8 +52,7 @@ class HomePage extends StatelessWidget {
       ),
       bottomNavigationBar: Consumer<HomePageProvider>(
         builder: (context, provider, child) {
-          final selectedItemColor =
-              Theme.of(context).bottomNavigationBarTheme.selectedItemColor;
+          final selectedItemColor = Theme.of(context).bottomNavigationBarTheme.selectedItemColor;
           final unselectedItemColor =
               Theme.of(context).bottomNavigationBarTheme.unselectedItemColor;
           return Container(
@@ -81,36 +80,28 @@ class HomePage extends StatelessWidget {
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       Assets.svg.challengeTab.path,
-                      color: provider.currentIndex == 0
-                          ? selectedItemColor
-                          : unselectedItemColor,
+                      color: provider.currentIndex == 0 ? selectedItemColor : unselectedItemColor,
                     ),
                     label: LocaleKeys.challenges_tab.tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       Assets.svg.goalsTab.path,
-                      color: provider.currentIndex == 1
-                          ? selectedItemColor
-                          : unselectedItemColor,
+                      color: provider.currentIndex == 1 ? selectedItemColor : unselectedItemColor,
                     ),
                     label: LocaleKeys.goals_tab.tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       Assets.svg.habitsTab.path,
-                      color: provider.currentIndex == 2
-                          ? selectedItemColor
-                          : unselectedItemColor,
+                      color: provider.currentIndex == 2 ? selectedItemColor : unselectedItemColor,
                     ),
                     label: LocaleKeys.habits_tab.tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
                       Assets.svg.profileTab.path,
-                      color: provider.currentIndex == 3
-                          ? selectedItemColor
-                          : unselectedItemColor,
+                      color: provider.currentIndex == 3 ? selectedItemColor : unselectedItemColor,
                     ),
                     label: LocaleKeys.profile_tab.tr(),
                   ),

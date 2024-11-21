@@ -15,8 +15,10 @@ import 'package:habit_tracker/presentation/challenge/create_challenge/create_cha
 import 'package:habit_tracker/presentation/challenge/edit_challenge/edit_challenge_page.dart';
 import 'package:habit_tracker/presentation/challenge/edit_challenge/edit_challenge_provider.dart';
 import 'package:habit_tracker/presentation/challenge/finished_challenge/finished_challenge_details_page.dart';
+import 'package:habit_tracker/presentation/challenge/finished_challenge/finished_challenges_page.dart';
 import 'package:habit_tracker/presentation/challenge/providers/challenge_details_provider.dart';
 import 'package:habit_tracker/presentation/challenge/providers/challenge_info_provider.dart';
+import 'package:habit_tracker/presentation/challenge/providers/finished_challenges_provider.dart';
 import 'package:habit_tracker/presentation/error/unknown_page.dart';
 import 'package:habit_tracker/presentation/goal/create_goal_group_page.dart';
 import 'package:habit_tracker/presentation/goal/goal_group_page.dart';
@@ -31,6 +33,7 @@ import 'package:habit_tracker/presentation/home/providers/home_page_provider.dar
 import 'package:habit_tracker/presentation/language_selection/language_selection_page.dart';
 import 'package:habit_tracker/presentation/profile/edit_profile_page.dart';
 import 'package:habit_tracker/presentation/profile/providers/edit_profile_provider.dart';
+import 'package:habit_tracker/presentation/settings/settings_page.dart';
 import 'package:habit_tracker/presentation/start_screen/splash_page.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +57,8 @@ class AppRoutes {
   static const String habitDetails = '/habit-details';
   static const String editProfile = '/edit-profile';
   static const String finishedChallengeDetails = '/finished-challenge-details';
+  static const String finishedChallengesPage = '/finished-challenges-page';
+  static const String applicationSettings = '/settings';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -180,6 +185,19 @@ class AppRoutes {
           builder: (context) => FinishedChallengeDetailsPage(
             challenge: settings.arguments as ChallengeModel,
           ),
+          settings: settings,
+        );
+      case finishedChallengesPage:
+        return MaterialPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+            create: (_) => FinishedChallengesProvider(),
+            child: const FinishedChallengesPage(),
+          ),
+          settings: settings,
+        );
+      case applicationSettings:
+        return MaterialPageRoute(
+          builder: (context) => const SettingsPage(),
           settings: settings,
         );
       default:

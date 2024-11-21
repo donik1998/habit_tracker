@@ -216,7 +216,9 @@ class LocalDatabaseRepository {
   }
 
   Future<List<ChallengeModel>> fetchAllChallenges() async {
-    final challenges = await _database.select(_database.challenges).get();
+    final challenges = await (_database.select(_database.challenges)
+          ..where((tbl) => tbl.isCompleted.equals(false)))
+        .get();
     return challenges.map((challenge) {
       return ChallengeModel(
         id: challenge.id,
@@ -338,5 +340,33 @@ class LocalDatabaseRepository {
   Future<void> finishChallenge(int challengeId) async {
     await (_database.update(_database.challenges)..where((tbl) => tbl.id.equals(challengeId)))
         .write(const ChallengesCompanion(isCompleted: Value(true)));
+  }
+
+  Future<List<ChallengeModel>> fetchFinishedChallenges() async {
+    final completedChallenges = await (_database.select(_database.challenges)
+          ..where((tbl) => tbl.isCompleted.equals(true)))
+        .get();
+    final challenges = List<ChallengeModel>.empty(growable: true);
+
+    final challengeFutures = completedChallenges.map(
+      (challenge) => fetchHabitsByChallengeId(challenge.id).then(
+        (habits) => challenges.add(
+          ChallengeModel(
+            id: challenge.id,
+            title: challenge.name,
+            iconPath: challenge.iconPath,
+            duration: challenge.durationInDays,
+            startDate: challenge.startDate,
+            progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
+            habits: habits,
+            isCompleted: challenge.isCompleted,
+          ),
+        ),
+      ),
+    );
+
+    await Future.wait(challengeFutures);
+
+    return challenges;
   }
 }
