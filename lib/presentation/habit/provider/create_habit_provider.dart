@@ -59,6 +59,8 @@ class CreateHabitProvider extends ChangeNotifier {
         description: descriptionController.text,
         iconPath: selectedIconPath ?? '',
         color: selectedColor?.value.toRadixString(16) ?? '',
+        cacheTimestamp: DateTime.now(),
+        isCompleted: false,
       );
 
       await _localDatabaseRepository.createHabit(habit);

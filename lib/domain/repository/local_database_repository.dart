@@ -8,22 +8,6 @@ import 'package:injectable/injectable.dart';
 class LocalDatabaseRepository {
   final _database = LocalDatabase.instance;
 
-  Future<void> deleteChallenge(int challengeId) async {
-    await (_database.delete(_database.challenges)..where((tbl) => tbl.id.equals(challengeId))).go();
-  }
-
-  Future<void> editChallenge(ChallengeModel challenge) async {
-    await (_database.update(_database.challenges)..where((tbl) => tbl.id.equals(challenge.id)))
-        .write(
-      ChallengesCompanion(
-        name: Value(challenge.title),
-        iconPath: Value(challenge.iconPath),
-        durationInDays: Value(challenge.duration),
-        startDate: Value(challenge.startDate),
-      ),
-    );
-  }
-
   Stream<List<HabitModel>> watchHabits() async* {
     yield* _database.select(_database.habits).watch().asyncMap((event) async {
       final habits = List<HabitModel>.empty(growable: true);
@@ -37,8 +21,10 @@ class LocalDatabaseRepository {
             iconPath: e.iconPath,
             challengeId: e.challengeId,
             description: e.description,
+            isCompleted: e.isCompleted,
             color: e.colorHex,
             id: e.id,
+            cacheTimestamp: e.cacheTimestamp,
             progress: habitProgress,
           );
         }).then((value) => habits.add(value));
@@ -62,6 +48,7 @@ class LocalDatabaseRepository {
             iconPath: e.iconPath,
             duration: e.durationInDays,
             startDate: e.startDate,
+            cacheTimestamp: e.cacheTimestamp,
             progress: e.startDate.difference(DateTime.now()).inDays.abs(),
             isCompleted: e.isCompleted,
             habits: allHabits,
@@ -84,6 +71,7 @@ class LocalDatabaseRepository {
             goals: goals,
             iconPath: e.iconPath,
             name: e.name,
+            cacheTimestamp: e.cacheTimestamp,
           );
         }).then((value) => goalGroups.add(value)),
       );
@@ -92,16 +80,67 @@ class LocalDatabaseRepository {
     });
   }
 
-  Future<void> editHabitProgress({
-    required int habitId,
-    required int progressId,
-    required double progress,
-  }) async {
-    await (_database.update(_database.habitRecords)
-          ..where((tbl) => tbl.habitId.equals(habitId))
-          ..where((tbl) => tbl.id.equals(progressId)))
-        .write(HabitRecordsCompanion(progress: Value(progress)))
-        .then((value) => print(value));
+  //
+
+  Future<List<HabitModel>> fetchAllHabits() async {
+    final habits = await (_database.select(_database.habits)).get();
+
+    return habits.map((habit) {
+      return HabitModel(
+        id: habit.id,
+        title: habit.name,
+        iconPath: habit.iconPath,
+        challengeId: habit.challengeId,
+        description: habit.description,
+        color: habit.colorHex,
+        cacheTimestamp: habit.cacheTimestamp,
+        isCompleted: habit.isCompleted,
+        progress: [],
+      );
+    }).toList();
+  }
+
+  Future<List<HabitProgressModel>> fetchAllHabitProgress() async {
+    final progressData = await (_database.select(_database.habitRecords)).get();
+
+    return progressData.map((progress) {
+      return HabitProgressModel(
+        id: progress.id,
+        habitId: progress.habitId,
+        dayCount: progress.dayCount,
+        progress: progress.progress,
+        date: progress.date,
+        cacheTimestamp: progress.cacheTimestamp,
+      );
+    }).toList();
+  }
+
+  Future<List<GoalGroupModel>> fetchAllGoalGroups() async {
+    final goalGroups = await (_database.select(_database.goalsGroup)).get();
+
+    return goalGroups.map((group) {
+      return GoalGroupModel(
+        id: group.id,
+        name: group.name,
+        iconPath: group.iconPath,
+        cacheTimestamp: group.cacheTimestamp,
+        goals: [],
+      );
+    }).toList();
+  }
+
+  Future<List<GoalModel>> fetchAllGoals() async {
+    final goals = await (_database.select(_database.goals)).get();
+
+    return goals.map((goal) {
+      return GoalModel(
+        id: goal.id,
+        groupId: goal.groupId,
+        description: goal.description,
+        isCompleted: goal.isCompleted,
+        cacheTimestamp: goal.cacheTimestamp,
+      );
+    }).toList();
   }
 
   Future<List<GoalModel>> fetchGoalsByGroupId(int id) async {
@@ -113,6 +152,7 @@ class LocalDatabaseRepository {
         groupId: goal.groupId,
         description: goal.description,
         isCompleted: goal.isCompleted,
+        cacheTimestamp: goal.cacheTimestamp,
       );
     }).toList();
   }
@@ -133,6 +173,8 @@ class LocalDatabaseRepository {
               challengeId: habit.challengeId,
               description: habit.description,
               color: habit.colorHex,
+              cacheTimestamp: habit.cacheTimestamp,
+              isCompleted: habit.isCompleted,
               progress: habitProgress,
             ),
           ),
@@ -158,6 +200,7 @@ class LocalDatabaseRepository {
       startDate: challenge.startDate,
       progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
       isCompleted: challenge.isCompleted,
+      cacheTimestamp: challenge.cacheTimestamp,
       habits: habits,
     );
   }
@@ -179,6 +222,136 @@ class LocalDatabaseRepository {
       description: habit.description,
       color: habit.colorHex,
       progress: habitProgress,
+      cacheTimestamp: habit.cacheTimestamp,
+      isCompleted: habit.isCompleted,
+    );
+  }
+
+  Future<List<ChallengeModel>> fetchAllChallenges() async {
+    final challenges = await (_database.select(_database.challenges)
+          ..where((tbl) => tbl.isCompleted.equals(false)))
+        .get();
+    return challenges.map((challenge) {
+      return ChallengeModel(
+        id: challenge.id,
+        title: challenge.name,
+        iconPath: challenge.iconPath,
+        duration: challenge.durationInDays,
+        startDate: challenge.startDate,
+        progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
+        isCompleted: challenge.isCompleted,
+        cacheTimestamp: challenge.cacheTimestamp,
+        habits: [],
+      );
+    }).toList();
+  }
+
+  Future<GoalModel?> fetchGoal({
+    int? id,
+    String? description,
+  }) async {
+    if (id == null && description == null) {
+      throw Exception('Both id and description are null');
+    }
+
+    Goal? goal;
+    if (id != null) {
+      goal =
+          await (_database.select(_database.goals)..where((tbl) => tbl.id.equals(id))).getSingle();
+    } else if (description != null) {
+      goal = await (_database.select(_database.goals)
+            ..where((tbl) => tbl.description.equals(description)))
+          .getSingle();
+    }
+
+    if (goal != null) {
+      return GoalModel(
+        id: goal.id,
+        groupId: goal.groupId,
+        description: goal.description,
+        isCompleted: goal.isCompleted,
+        cacheTimestamp: goal.cacheTimestamp,
+      );
+    }
+
+    return null;
+  }
+
+  Future<List<HabitProgressModel>> fetchHabitProgress(int habitId) async {
+    final habitProgress = await (_database.select(_database.habitRecords)
+          ..where((tbl) => tbl.habitId.equals(habitId)))
+        .get();
+
+    return habitProgress.map((progress) {
+      return HabitProgressModel(
+        id: progress.id,
+        habitId: progress.habitId,
+        dayCount: progress.dayCount,
+        progress: progress.progress,
+        date: progress.date,
+        cacheTimestamp: progress.cacheTimestamp,
+      );
+    }).toList();
+  }
+
+  Future<List<ChallengeModel>> fetchFinishedChallenges() async {
+    final completedChallenges = await (_database.select(_database.challenges)
+          ..where((tbl) => tbl.isCompleted.equals(true)))
+        .get();
+    final challenges = List<ChallengeModel>.empty(growable: true);
+
+    final challengeFutures = completedChallenges.map(
+      (challenge) => fetchHabitsByChallengeId(challenge.id).then(
+        (habits) => challenges.add(
+          ChallengeModel(
+            id: challenge.id,
+            title: challenge.name,
+            iconPath: challenge.iconPath,
+            duration: challenge.durationInDays,
+            startDate: challenge.startDate,
+            progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
+            habits: habits,
+            isCompleted: challenge.isCompleted,
+            cacheTimestamp: challenge.cacheTimestamp,
+          ),
+        ),
+      ),
+    );
+
+    await Future.wait(challengeFutures);
+
+    return challenges;
+  }
+
+  Future<void> deleteChallenge(int challengeId) async {
+    await (_database.delete(_database.challenges)..where((tbl) => tbl.id.equals(challengeId))).go();
+  }
+
+  Future<void> editChallenge(ChallengeModel challenge) async {
+    await (_database.update(_database.challenges)..where((tbl) => tbl.id.equals(challenge.id)))
+        .write(
+      ChallengesCompanion(
+        name: Value(challenge.title),
+        iconPath: Value(challenge.iconPath),
+        durationInDays: Value(challenge.duration),
+        startDate: Value(challenge.startDate),
+      ),
+    );
+  }
+
+  Future<void> editHabitProgress({
+    required int habitId,
+    required int progressId,
+    required double progress,
+  }) async {
+    await (_database.update(_database.habitRecords)
+          ..where((tbl) => tbl.habitId.equals(habitId))
+          ..where((tbl) => tbl.id.equals(progressId)))
+        .write(
+      HabitRecordsCompanion(
+        progress: Value(progress),
+        cacheTimestamp: Value(DateTime.now()),
+      ),
     );
   }
 
@@ -215,61 +388,14 @@ class LocalDatabaseRepository {
     await _database.into(_database.challenges).insert(challenge);
   }
 
-  Future<List<ChallengeModel>> fetchAllChallenges() async {
-    final challenges = await (_database.select(_database.challenges)
-          ..where((tbl) => tbl.isCompleted.equals(false)))
-        .get();
-    return challenges.map((challenge) {
-      return ChallengeModel(
-        id: challenge.id,
-        title: challenge.name,
-        iconPath: challenge.iconPath,
-        duration: challenge.durationInDays,
-        startDate: challenge.startDate,
-        progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
-        isCompleted: challenge.isCompleted,
-        habits: [],
-      );
-    }).toList();
-  }
-
   Future<void> updateGoal(GoalModel goal) async {
     await (_database.update(_database.goals)..where((tbl) => tbl.id.equals(goal.id))).write(
       GoalsCompanion(
         description: Value(goal.description),
         isCompleted: Value(goal.isCompleted),
+        cacheTimestamp: Value(DateTime.now()),
       ),
     );
-  }
-
-  Future<GoalModel?> fetchGoal({
-    int? id,
-    String? description,
-  }) async {
-    if (id == null && description == null) {
-      throw Exception('Both id and description are null');
-    }
-
-    Goal? goal;
-    if (id != null) {
-      goal =
-          await (_database.select(_database.goals)..where((tbl) => tbl.id.equals(id))).getSingle();
-    } else if (description != null) {
-      goal = await (_database.select(_database.goals)
-            ..where((tbl) => tbl.description.equals(description)))
-          .getSingle();
-    }
-
-    if (goal != null) {
-      return GoalModel(
-        id: goal.id,
-        groupId: goal.groupId,
-        description: goal.description,
-        isCompleted: goal.isCompleted,
-      );
-    }
-
-    return null;
   }
 
   Future<void> createGoal({
@@ -321,52 +447,13 @@ class LocalDatabaseRepository {
     await Future.wait(habitRecords);
   }
 
-  Future<List<HabitProgressModel>> fetchHabitProgress(int habitId) async {
-    final habitProgress = await (_database.select(_database.habitRecords)
-          ..where((tbl) => tbl.habitId.equals(habitId)))
-        .get();
-
-    return habitProgress.map((progress) {
-      return HabitProgressModel(
-        id: progress.id,
-        habitId: progress.habitId,
-        dayCount: progress.dayCount,
-        progress: progress.progress,
-        date: progress.date,
-      );
-    }).toList();
-  }
-
   Future<void> finishChallenge(int challengeId) async {
     await (_database.update(_database.challenges)..where((tbl) => tbl.id.equals(challengeId)))
-        .write(const ChallengesCompanion(isCompleted: Value(true)));
-  }
-
-  Future<List<ChallengeModel>> fetchFinishedChallenges() async {
-    final completedChallenges = await (_database.select(_database.challenges)
-          ..where((tbl) => tbl.isCompleted.equals(true)))
-        .get();
-    final challenges = List<ChallengeModel>.empty(growable: true);
-
-    final challengeFutures = completedChallenges.map(
-      (challenge) => fetchHabitsByChallengeId(challenge.id).then(
-        (habits) => challenges.add(
-          ChallengeModel(
-            id: challenge.id,
-            title: challenge.name,
-            iconPath: challenge.iconPath,
-            duration: challenge.durationInDays,
-            startDate: challenge.startDate,
-            progress: challenge.startDate.difference(DateTime.now()).inDays.abs(),
-            habits: habits,
-            isCompleted: challenge.isCompleted,
-          ),
-        ),
+        .write(
+      ChallengesCompanion(
+        isCompleted: const Value(true),
+        cacheTimestamp: Value(DateTime.now()),
       ),
     );
-
-    await Future.wait(challengeFutures);
-
-    return challenges;
   }
 }

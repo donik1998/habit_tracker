@@ -9,6 +9,7 @@ class ChallengeModel {
   final List<HabitModel> habits;
   final int id;
   final bool isCompleted;
+  final DateTime cacheTimestamp;
 
   ChallengeModel({
     required this.id,
@@ -19,6 +20,7 @@ class ChallengeModel {
     required this.progress,
     required this.habits,
     required this.isCompleted,
+    required this.cacheTimestamp,
   });
 
   ChallengeModel copyWith({
@@ -30,6 +32,7 @@ class ChallengeModel {
     List<HabitModel>? habits,
     int? id,
     bool? isCompleted,
+    DateTime? cacheTimestamp,
   }) {
     return ChallengeModel(
       title: title ?? this.title,
@@ -40,6 +43,7 @@ class ChallengeModel {
       habits: habits ?? this.habits,
       id: id ?? this.id,
       isCompleted: isCompleted ?? this.isCompleted,
+      cacheTimestamp: cacheTimestamp ?? this.cacheTimestamp,
     );
   }
 
@@ -65,9 +69,11 @@ class HabitModel {
   final int? challengeId;
   final String title;
   final String description;
+  final bool isCompleted;
   final String iconPath;
   final String color;
   final List<HabitProgressModel> progress;
+  final DateTime cacheTimestamp;
 
   Color get uiColor => Color(int.parse(color, radix: 16));
 
@@ -125,6 +131,8 @@ class HabitModel {
     required this.iconPath,
     required this.color,
     this.progress = const [],
+    required this.isCompleted,
+    required this.cacheTimestamp,
   });
 
   HabitModel copyWith({
@@ -134,6 +142,8 @@ class HabitModel {
     String? iconPath,
     String? color,
     List<HabitProgressModel>? progress,
+    bool? isCompleted,
+    DateTime? cacheTimestamp,
   }) {
     return HabitModel(
       id: id,
@@ -143,6 +153,8 @@ class HabitModel {
       iconPath: iconPath ?? this.iconPath,
       color: color ?? this.color,
       progress: progress ?? this.progress,
+      isCompleted: isCompleted ?? this.isCompleted,
+      cacheTimestamp: cacheTimestamp ?? this.cacheTimestamp,
     );
   }
 
@@ -154,6 +166,8 @@ class HabitModel {
       iconPath: '',
       color: '',
       progress: [],
+      isCompleted: false,
+      cacheTimestamp: DateTime.now(),
     );
   }
 
@@ -166,6 +180,7 @@ class HabitProgressModel {
   final int dayCount;
   final double progress;
   final DateTime date;
+  final DateTime cacheTimestamp;
 
   HabitProgressModel({
     required this.id,
@@ -173,6 +188,7 @@ class HabitProgressModel {
     required this.dayCount,
     this.progress = HABIT_PROGRESS_INITIAL,
     required this.date,
+    required this.cacheTimestamp,
   });
 
   HabitProgressModel.empty()
@@ -180,7 +196,8 @@ class HabitProgressModel {
         habitId = -1,
         dayCount = -1,
         progress = HABIT_PROGRESS_INITIAL,
-        date = DateTime.now();
+        date = DateTime.now(),
+        cacheTimestamp = DateTime.now();
 
   bool get isEmpty => id == -1;
 
@@ -198,6 +215,7 @@ class HabitProgressModel {
     int? dayCount,
     double? progress,
     DateTime? date,
+    DateTime? cacheTimestamp,
   }) {
     return HabitProgressModel(
       id: id ?? this.id,
@@ -205,6 +223,7 @@ class HabitProgressModel {
       dayCount: dayCount ?? this.dayCount,
       progress: progress ?? this.progress,
       date: date ?? this.date,
+      cacheTimestamp: cacheTimestamp ?? this.cacheTimestamp,
     );
   }
 }

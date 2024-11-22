@@ -25,6 +25,7 @@ class GoalsGroupPageProvider extends ChangeNotifier {
       description: newGoalTextController.text,
       groupId: groupModel.id,
       isCompleted: false,
+      cacheTimestamp: DateTime.now(),
     );
     if (newGoal.description.isEmpty) return;
     await localDatabaseRepository.createGoal(model: newGoal);

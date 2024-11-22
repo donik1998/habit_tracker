@@ -114,5 +114,6 @@
   "review": "Review",
   "finished_challenge_text": "Congratulations on Completing Your 21-Day Challenge!",
   "total_progress": "Total progress",
-  "completed_challenge_message": "Completed 21-Day Challenge!"
+  "completed_challenge_message": "Completed 21-Day Challenge!",
+  "push_notifications": "Push notifications"
 }
