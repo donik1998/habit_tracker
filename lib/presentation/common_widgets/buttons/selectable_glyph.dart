@@ -25,14 +25,14 @@ class SelectableGlyph extends StatelessWidget {
         width: width,
         height: width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: selected
               ? null
               : Border.all(
                   color: AppColors.borderStandard,
                   width: 1,
                 ),
-          color: selected ? AppColors.purple50 : null,
+          color: selected ? AppColors.purple500 : null,
         ),
         child: Center(
           child: SvgPicture.asset(
@@ -40,7 +40,7 @@ class SelectableGlyph extends StatelessWidget {
             width: 24,
             height: 24,
             fit: BoxFit.cover,
-            color: selected ? AppColors.purple500 : null,
+            color: selected ? Colors.white : null,
           ),
         ),
       ),

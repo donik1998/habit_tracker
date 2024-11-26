@@ -15,7 +15,7 @@ class BottomSheetWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       child: ColoredBox(
         color: Colors.white,
         child: Column(

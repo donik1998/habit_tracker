@@ -23,7 +23,7 @@ class ProfileTab extends StatelessWidget {
           children: [
             ClipRRect(
               clipBehavior: Clip.hardEdge,
-              borderRadius: BorderRadius.vertical(
+              borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(24),
               ),
               child: ColoredBox(

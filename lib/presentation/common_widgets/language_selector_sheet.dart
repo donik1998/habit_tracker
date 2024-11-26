@@ -29,8 +29,8 @@ class _LanguageSelectorSheetState extends State<LanguageSelectorSheet> {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       height: MediaQuery.sizeOf(context).height * 0.425,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(24),
@@ -64,7 +64,7 @@ class _LanguageSelectorSheetState extends State<LanguageSelectorSheet> {
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 visualDensity: VisualDensity.compact,
                 padding: EdgeInsets.zero,
               ),

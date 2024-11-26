@@ -20,16 +20,16 @@ class HomePage extends StatelessWidget {
 
   final List<Widget> _pages = [
     ChangeNotifierProvider(
-      create: (_) => ChallengeTabProvider(),
-      child: const ChallengesTab(),
+      create: (_) => HabitsTabProvider(),
+      child: const HabitsTab(),
     ),
     ChangeNotifierProvider(
       create: (_) => GoalsTabProvider(),
       child: const GoalsTab(),
     ),
     ChangeNotifierProvider(
-      create: (_) => HabitsTabProvider(),
-      child: const HabitsTab(),
+      create: (_) => ChallengeTabProvider(),
+      child: const ChallengesTab(),
     ),
     ChangeNotifierProvider(
       create: (_) => ProfileTabProvider(),
@@ -79,10 +79,10 @@ class HomePage extends StatelessWidget {
                 items: [
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
-                      Assets.svg.challengeTab.path,
+                      Assets.svg.habitsTab.path,
                       color: provider.currentIndex == 0 ? selectedItemColor : unselectedItemColor,
                     ),
-                    label: LocaleKeys.challenges_tab.tr(),
+                    label: LocaleKeys.habits_tab.tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
@@ -93,10 +93,10 @@ class HomePage extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(
-                      Assets.svg.habitsTab.path,
+                      Assets.svg.challengeTab.path,
                       color: provider.currentIndex == 2 ? selectedItemColor : unselectedItemColor,
                     ),
-                    label: LocaleKeys.habits_tab.tr(),
+                    label: LocaleKeys.challenges_tab.tr(),
                   ),
                   BottomNavigationBarItem(
                     icon: SvgPicture.asset(

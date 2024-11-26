@@ -66,7 +66,6 @@ class CreateHabitProvider extends ChangeNotifier {
       await _localDatabaseRepository.createHabit(habit);
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   }

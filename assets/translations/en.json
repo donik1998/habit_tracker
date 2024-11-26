@@ -115,5 +115,6 @@
   "finished_challenge_text": "Congratulations on Completing Your 21-Day Challenge!",
   "total_progress": "Total progress",
   "completed_challenge_message": "Completed 21-Day Challenge!",
-  "push_notifications": "Push notifications"
+  "push_notifications": "Push notifications",
+  "challenge_duration_description": "You can change the duration of your challenge to any value between 21 and 365"
 }

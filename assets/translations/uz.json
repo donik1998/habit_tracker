@@ -115,6 +115,7 @@
   "finished_challenge_text": "21-kunlik mashaqqatni yakunlaganingizga tabriklaymiz!",
   "total_progress": "Umumiy progress",
   "completed_challenge_message": "21-kunlik mashqqatni yakunlagan!",
-  "push_notifications": "Push xabarnomalar"
+  "push_notifications": "Push xabarnomalar",
+  "challenge_duration_description": "Siz sinov muddatini 21 dan 365 gacha bo'lgan istalgan qiymatga o'zgartirishingiz mumkin",
 
 }

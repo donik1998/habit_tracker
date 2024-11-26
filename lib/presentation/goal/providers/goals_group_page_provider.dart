@@ -47,7 +47,6 @@ class GoalsGroupPageProvider extends ChangeNotifier {
 
     final goalIndex = groupModel.goals.indexWhere((element) => element.id == goalId);
     GoalModel goal = groupModel.goals.elementAt(goalIndex);
-    print('Got parameters: $newDescription, $done');
     if (goalIndex.isNegative) return;
 
     if (newDescription != null) goal = goal.copyWith(description: newDescription);

@@ -124,7 +124,8 @@ class SignUpPageProvider with ChangeNotifier {
 
   bool get passwordHasEnoughCharacters => _passwordLengthCheck.hasMatch(passwordController.text);
 
-  bool get passwordHasAnySymbolAndNumber => _hasAnySymbolAndNumber.hasMatch(passwordController.text);
+  bool get passwordHasAnySymbolAndNumber =>
+      _hasAnySymbolAndNumber.hasMatch(passwordController.text);
 
   final _whiteSpaceCheck = RegExp(r'^[^\s]+$');
   final _passwordLengthCheck = RegExp(r'^.{8,}$');
@@ -170,7 +171,6 @@ class SignUpPageProvider with ChangeNotifier {
       notifyListeners();
       return user != null;
     } catch (e) {
-      print(e);
       loading = false;
       notifyListeners();
       return false;

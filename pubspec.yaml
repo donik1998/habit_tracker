@@ -2,7 +2,7 @@ name: habit_tracker
 description: "Habit tracker that helps to monitor activity"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: ^3.5.1
@@ -34,6 +34,7 @@ dependencies:
     path: ../flutter_in_app_color_filter
   image_picker: ^1.1.2
   firebase_storage: ^12.3.5
+  popover: ^0.3.1
 
 dev_dependencies:
   flutter_test:

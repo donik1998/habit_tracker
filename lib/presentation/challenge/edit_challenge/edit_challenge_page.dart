@@ -50,7 +50,8 @@ class EditChallengePage extends StatelessWidget {
                 AppSpacing.vertical24,
                 Text(
                   LocaleKeys.icon.tr(),
-                  style: textTheme?.mediumTextTheme.typography3.copyWith(color: AppColors.platinum900),
+                  style:
+                      textTheme?.mediumTextTheme.typography3.copyWith(color: AppColors.platinum900),
                 ),
                 AppSpacing.vertical12,
                 Row(
@@ -129,7 +130,7 @@ class EditChallengePage extends StatelessWidget {
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(16.0),
                                 topRight: Radius.circular(16.0),
                               ),
@@ -159,7 +160,8 @@ class EditChallengePage extends StatelessWidget {
                                     mode: CupertinoDatePickerMode.date,
                                     use24hFormat: true,
                                     showDayOfWeek: true,
-                                    onDateTimeChanged: (DateTime newDate) => provider.setStartDate(newDate),
+                                    onDateTimeChanged: (DateTime newDate) =>
+                                        provider.setStartDate(newDate),
                                   ),
                                 ),
                               ],

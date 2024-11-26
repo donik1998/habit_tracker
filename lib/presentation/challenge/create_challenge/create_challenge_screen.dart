@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:habit_tracker/gen/assets.gen.dart';
 import 'package:habit_tracker/generated/locale_keys.g.dart';
 import 'package:habit_tracker/presentation/challenge/create_challenge/create_challenge_provider.dart';
+import 'package:habit_tracker/presentation/common_widgets/buttons/popover_button.dart';
 import 'package:habit_tracker/presentation/common_widgets/buttons/selectable_glyph.dart';
 import 'package:habit_tracker/presentation/common_widgets/buttons/standart_button.dart';
 import 'package:habit_tracker/presentation/common_widgets/inputs/custom_input_field.dart';
@@ -52,7 +53,8 @@ class CreateChallengePage extends StatelessWidget {
                 AppSpacing.vertical24,
                 Text(
                   LocaleKeys.icon.tr(),
-                  style: textTheme?.mediumTextTheme.typography3.copyWith(color: AppColors.platinum900),
+                  style:
+                      textTheme?.mediumTextTheme.typography3.copyWith(color: AppColors.platinum900),
                 ),
                 AppSpacing.vertical12,
                 Row(
@@ -109,7 +111,10 @@ class CreateChallengePage extends StatelessWidget {
                 CustomInputField(
                   label: LocaleKeys.duration.tr(),
                   controller: provider.durationController,
-                  suffixIcon: SvgPicture.asset(Assets.svg.informationOutlined.path),
+                  suffixIcon: PopOverButton(
+                    size: Size(MediaQuery.sizeOf(context).width * 0.75, 100),
+                    text: LocaleKeys.challenge_duration_description.tr(),
+                  ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
@@ -131,7 +136,7 @@ class CreateChallengePage extends StatelessWidget {
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(16.0),
                                 topRight: Radius.circular(16.0),
                               ),
@@ -161,7 +166,8 @@ class CreateChallengePage extends StatelessWidget {
                                     mode: CupertinoDatePickerMode.date,
                                     use24hFormat: true,
                                     showDayOfWeek: true,
-                                    onDateTimeChanged: (DateTime newDate) => provider.setStartDate(newDate),
+                                    onDateTimeChanged: (DateTime newDate) =>
+                                        provider.setStartDate(newDate),
                                   ),
                                 ),
                               ],

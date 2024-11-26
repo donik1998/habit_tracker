@@ -107,5 +107,6 @@ abstract class  LocaleKeys {
   static const total_progress = 'total_progress';
   static const completed_challenge_message = 'completed_challenge_message';
   static const push_notifications = 'push_notifications';
+  static const challenge_duration_description = 'challenge_duration_description';
 
 }

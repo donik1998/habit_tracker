@@ -59,8 +59,8 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
             }).toList();
           },
           padding: EdgeInsets.zero,
-          underline: SizedBox(),
-          icon: Icon(
+          underline: const SizedBox(),
+          icon: const Icon(
             Icons.arrow_drop_down_rounded,
             color: AppColors.textFieldText,
           ),

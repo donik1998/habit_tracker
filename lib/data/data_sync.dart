@@ -18,7 +18,7 @@ class SyncStep {
 Future<void> syncOutdatedLocalData(List<SyncStep> steps) async {
   await Future.wait(
     steps.map(
-      (step) => step.action().then((val) => print('Synced ${step.name}')),
+      (step) => step.action(),
     ),
   );
 }

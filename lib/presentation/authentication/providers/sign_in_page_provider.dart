@@ -27,7 +27,7 @@ class SignInPageProvider extends ChangeNotifier {
 
   String? emailErrorMessage;
   String? passwordErrorMessage;
-  Debouncer _validateDebouncer = Debouncer(delayMilliseconds: 800);
+  final Debouncer _validateDebouncer = Debouncer(delayMilliseconds: 800);
 
   bool obscurePassword = true;
   bool loading = false;
@@ -69,7 +69,8 @@ class SignInPageProvider extends ChangeNotifier {
     }
   }
 
-  bool get isFormValid => emailErrorMessage == null && passwordErrorMessage == null && !hasAnyEmptyField;
+  bool get isFormValid =>
+      emailErrorMessage == null && passwordErrorMessage == null && !hasAnyEmptyField;
 
   bool get hasAnyEmptyField => emailController.text.isEmpty || passwordController.text.isEmpty;
 
@@ -87,12 +88,12 @@ class SignInPageProvider extends ChangeNotifier {
       notifyListeners();
       final email = emailController.text.trim();
       final password = passwordController.text.trim();
-      final val = await _authRepository.signInWithEmailAndPassword(email: email, password: password);
+      final val =
+          await _authRepository.signInWithEmailAndPassword(email: email, password: password);
       loading = false;
       notifyListeners();
       return val != null;
     } catch (e) {
-      print(e);
       loading = false;
       passwordErrorMessage = LocaleKeys.something_went_wrong.tr();
       notifyListeners();

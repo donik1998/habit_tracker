@@ -70,7 +70,6 @@ class ForgotPasswordPageProvider extends ChangeNotifier {
       loading = false;
       notifyListeners();
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

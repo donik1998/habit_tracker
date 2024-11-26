@@ -37,7 +37,7 @@ class GoalGroupWidget extends StatelessWidget {
           ).whenComplete(() => onDone?.call());
         },
         child: Ink(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -45,7 +45,7 @@ class GoalGroupWidget extends StatelessWidget {
                 width: 48,
                 height: 48,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                   child: ColoredBox(
                     color: AppColors.purple500,
                     child: Padding(

@@ -28,7 +28,7 @@ class FinishedChallengePreview extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(
+              icon: const Icon(
                 Icons.close_rounded,
                 size: 24,
                 color: Colors.black,

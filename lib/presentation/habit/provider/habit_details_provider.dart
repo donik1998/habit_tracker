@@ -24,7 +24,6 @@ class HabitDetailsProvider extends ChangeNotifier {
       );
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   }
